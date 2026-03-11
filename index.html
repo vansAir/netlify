@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>zzZ - Terminal</title>
+<style>
+  body {
+    background-color: #0c0c0c;
+    color: #00ff00;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+  .prompt { color: #fff; }
+  .path { color: #00a1ff; }
+  .cursor {
+    display: inline-block;
+    width: 10px;
+    height: 1.2em;
+    background-color: #00ff00;
+    animation: blink 1s step-end infinite;
+    vertical-align: bottom;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+</style>
+</head>
+<body>
+  <div><span class="prompt">guest@server:</span><span class="path">~</span>$ whoami</div>
+  <div>zzZ</div>
+  <br>
+  <div><span class="prompt">guest@server:</span><span class="path">~</span>$ cat philosophy.txt</div>
+  <div>"Talk is cheap. Show me the code."</div>
+  <div>-- Linus Torvalds</div>
+  <br>
+  <div><span class="prompt">guest@server:</span><span class="path">~</span>$ ./execute_future.sh</div>
+  <div>Loading... [████████████████████] 100%</div>
+  <br>
+  <div><span class="prompt">guest@server:</span><span class="path">~</span>$ <span class="cursor"></span></div>
+</body>
+</html>
