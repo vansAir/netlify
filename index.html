@@ -1,729 +1,1602 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>小巷咖啡馆</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<title>小面的咖啡厅·面厅</title>
 <style>
-:root {
-  --cream: #faf6f0;
-  --warm: #f5ede0;
-  --card: #fffcf8;
-  --border: #e8ddd0;
-  --brown: #7c5c3e;
-  --brown-light: #a07850;
-  --brown-dark: #4a3020;
-  --accent: #e8935a;
-  --accent2: #d4a574;
-  --green: #7ab87a;
-  --red: #e07070;
-  --blue: #7aaed4;
-  --text: #3a2c20;
-  --muted: #9a8878;
-  --gold: #c8982a;
-  --r: 14px;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Noto Sans SC', sans-serif;
-  background: var(--cream);
-  color: var(--text);
-  min-height: 100vh;
-  padding: 0;
-}
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background:
-    radial-gradient(ellipse 800px 400px at 50% -100px, rgba(232,147,90,0.12) 0%, transparent 70%),
-    repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(200,160,100,0.025) 60px, rgba(200,160,100,0.025) 61px);
-  pointer-events: none; z-index: 0;
-}
+  @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
 
-.app { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 1.2rem; }
+  :root {
+    --bg: #1a0a00;
+    --bg2: #2a1500;
+    --card: #1f1008;
+    --card2: #2d1a0a;
+    --gold: #f5c842;
+    --gold2: #e8a020;
+    --red: #e84040;
+    --green: #4cd964;
+    --blue: #4ab8ff;
+    --purple: #b06aff;
+    --pink: #ff6aab;
+    --text: #f0e0c0;
+    --text2: #a08060;
+    --border: #5a3010;
+    --accent: #ff8c00;
+  }
 
-/* Header */
-.topbar {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 1.2rem;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 0.9rem 1.3rem;
-  box-shadow: 0 2px 12px rgba(120,80,40,0.07);
-}
-.cafe-name { font-family: 'Nunito', sans-serif; font-size: 1.35rem; font-weight: 800; color: var(--brown-dark); }
-.cafe-name span { color: var(--accent); }
-.resources { display: flex; gap: 1.2rem; flex-wrap: wrap; }
-.res { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; }
-.res-icon { font-size: 1.1rem; }
-.res-val { color: var(--brown-dark); }
-.res-label { color: var(--muted); font-size: 0.75rem; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Cafe display */
-.cafe-scene {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 1rem 1.2rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 12px rgba(120,80,40,0.06);
-  position: relative; overflow: hidden;
-}
-.scene-title { font-size: 0.72rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.7rem; }
-.cafe-visual {
-  display: flex; gap: 10px; flex-wrap: wrap;
-  min-height: 80px; align-items: flex-end;
-}
-.station {
-  background: var(--warm);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px 14px;
-  text-align: center;
-  font-size: 0.78rem;
-  position: relative;
-  transition: transform 0.2s;
-  min-width: 90px;
-}
-.station:hover { transform: translateY(-2px); }
-.station-icon { font-size: 1.8rem; display: block; margin-bottom: 4px; }
-.station-name { color: var(--brown); font-weight: 600; font-size: 0.75rem; }
-.station-rate { color: var(--accent); font-size: 0.7rem; margin-top: 2px; }
-.station-anim { position: absolute; top: -8px; right: -4px; font-size: 0.8rem; animation: popUp 1s ease-out forwards; pointer-events: none; }
-@keyframes popUp { from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-24px)} }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans SC', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(255,120,0,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(200,80,0,0.03) 0%, transparent 50%);
+  }
 
-.income-float {
-  position: absolute;
-  top: 10px; right: 16px;
-  font-size: 0.82rem; font-weight: 700; color: var(--accent);
-  animation: floatUp 1.5s ease-out forwards;
-  pointer-events: none;
-}
-@keyframes floatUp { from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-30px)} }
+  /* HEADER */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #2d1505 0%, #1a0a00 100%);
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  }
 
-/* Tabs */
-.tabs { display: flex; gap: 6px; margin-bottom: 0.8rem; }
-.tab {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.82rem; font-weight: 700;
-  padding: 7px 16px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: var(--card);
-  color: var(--muted);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.tab.active, .tab:hover { background: var(--brown); color: #fff; border-color: var(--brown); }
+  .avatar-wrap {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    border: 2.5px solid var(--gold);
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 0 12px rgba(245,200,66,0.4);
+    cursor: pointer;
+    position: relative;
+  }
+  .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar-wrap .upload-hint {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; color: var(--gold); opacity: 0;
+    transition: opacity .2s;
+  }
+  .avatar-wrap:hover .upload-hint { opacity: 1; }
 
-/* Panel grid */
-.panel-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
-  margin-bottom: 1rem;
-}
-.item-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 1rem;
-  cursor: pointer;
-  transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
-  position: relative;
-  box-shadow: 0 1px 4px rgba(120,80,40,0.05);
-}
-.item-card:hover:not(.locked):not(.maxed) { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(120,80,40,0.12); border-color: var(--accent2); }
-.item-card.locked { opacity: 0.5; cursor: not-allowed; }
-.item-card.maxed { border-color: var(--gold); background: #fffdf5; cursor: default; }
-.item-card:active:not(.locked):not(.maxed) { transform: translateY(0); }
+  .shop-title {
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 20px;
+    color: var(--gold);
+    text-shadow: 0 0 16px rgba(245,200,66,0.5);
+    letter-spacing: 2px;
+  }
+  .shop-subtitle { font-size: 11px; color: var(--text2); margin-top: 2px; }
 
-.card-icon { font-size: 2rem; margin-bottom: 6px; display: block; }
-.card-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.92rem; color: var(--brown-dark); margin-bottom: 3px; }
-.card-desc { font-size: 0.72rem; color: var(--muted); line-height: 1.5; margin-bottom: 8px; }
-.card-effect { font-size: 0.75rem; color: var(--green); font-weight: 600; margin-bottom: 6px; }
-.card-cost {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 0.78rem; font-weight: 700;
-  color: var(--brown);
-  background: var(--warm);
-  padding: 4px 10px; border-radius: 20px;
-  display: inline-flex;
-}
-.card-level {
-  position: absolute; top: 10px; right: 10px;
-  font-size: 0.65rem; font-weight: 700;
-  background: var(--accent); color: #fff;
-  padding: 2px 7px; border-radius: 10px;
-}
-.card-level.max { background: var(--gold); }
-.cant-afford { opacity: 0.6; }
+  .header-stats {
+    margin-left: auto;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+  }
 
-/* Event box */
-.event-box {
-  background: var(--card);
-  border: 1.5px solid var(--accent2);
-  border-radius: var(--r);
-  padding: 1rem 1.2rem;
-  margin-bottom: 1rem;
-  display: flex; align-items: flex-start; gap: 12px;
-  box-shadow: 0 2px 12px rgba(200,120,50,0.1);
-  animation: slideIn 0.3s ease;
-}
-@keyframes slideIn { from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)} }
-.event-icon { font-size: 2rem; flex-shrink: 0; }
-.event-content { flex: 1; }
-.event-title { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem; color: var(--brown-dark); margin-bottom: 3px; }
-.event-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; margin-bottom: 8px; }
-.event-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-.ev-btn {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.8rem; font-weight: 700;
-  padding: 6px 14px; border-radius: 20px;
-  border: 1px solid var(--border);
-  cursor: pointer; transition: all 0.15s;
-  background: var(--warm); color: var(--brown-dark);
-}
-.ev-btn:hover { background: var(--brown); color: #fff; border-color: var(--brown); }
-.ev-btn.good { background: var(--green); color: #fff; border-color: var(--green); }
-.ev-btn.bad { background: var(--red); color: #fff; border-color: var(--red); }
+  .stat-box {
+    text-align: center;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px 14px;
+  }
+  .stat-label { font-size: 10px; color: var(--text2); }
+  .stat-value { font-size: 18px; font-weight: 700; color: var(--gold); }
+  .stat-rate { font-size: 11px; color: var(--green); }
 
-/* Log */
-.log-area {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 0.8rem 1rem;
-  max-height: 140px;
-  overflow-y: auto;
-}
-.log-entry { font-size: 0.78rem; line-height: 1.9; color: var(--muted); }
-.log-entry.good { color: var(--green); }
-.log-entry.bad { color: var(--red); }
-.log-entry.event { color: var(--accent); }
-.log-entry.gold { color: var(--gold); }
+  .day-box {
+    text-align: center;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px 14px;
+  }
+  .day-label { font-size: 10px; color: var(--text2); }
+  .day-value { font-size: 15px; font-weight: 700; color: var(--accent); }
 
-/* Stats bar */
-.stats-row {
-  display: grid; grid-template-columns: repeat(4,1fr);
-  gap: 8px; margin-bottom: 1rem;
-}
-.stat-mini {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px; text-align: center;
-  box-shadow: 0 1px 4px rgba(120,80,40,0.04);
-}
-.stat-mini-val { font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--brown-dark); }
-.stat-mini-label { font-size: 0.65rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.05em; }
+  /* MAIN LAYOUT */
+  .main { display: grid; grid-template-columns: 280px 1fr 280px; gap: 14px; padding: 14px; max-width: 1400px; margin: 0 auto; }
 
-/* Progress bar */
-.prog-wrap { margin-top: 6px; background: var(--border); border-radius: 4px; height: 5px; overflow: hidden; }
-.prog-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.5s; }
+  /* PANELS */
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .panel-header {
+    background: linear-gradient(90deg, var(--card2), var(--bg2));
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 15px;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-body { padding: 12px; }
 
-/* Notif */
-.notif {
-  position: fixed; bottom: 24px; right: 24px;
-  background: var(--brown-dark); color: #fff;
-  padding: 10px 18px; border-radius: 20px;
-  font-size: 0.82rem; font-weight: 600;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  z-index: 999;
-  animation: notifIn 0.3s ease;
-  max-width: 280px;
-}
-@keyframes notifIn { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
+  /* SHOP UPGRADES */
+  .upgrade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .upgrade-btn {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+    color: var(--text);
+  }
+  .upgrade-btn:hover:not(.locked) { border-color: var(--gold); background: #3a2010; transform: translateY(-1px); }
+  .upgrade-btn.locked { opacity: 0.45; cursor: not-allowed; }
+  .upgrade-btn.maxed { border-color: var(--green); background: #0a2010; }
+  .upgrade-icon { font-size: 22px; }
+  .upgrade-name { font-size: 11px; font-weight: 600; margin: 4px 0 2px; }
+  .upgrade-cost { font-size: 11px; color: var(--gold); }
+  .upgrade-level { font-size: 10px; color: var(--text2); }
+  .upgrade-desc { font-size: 9px; color: var(--text2); margin-top: 2px; line-height: 1.3; }
 
-/* Hidden tab content */
-.tab-content { display: none; }
-.tab-content.active { display: block; }
+  /* CENTER - CAFE FLOOR */
+  .cafe-section { display: flex; flex-direction: column; gap: 14px; }
 
-.empty-state { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.85rem; }
+  .cafe-floor {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    min-height: 220px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cafe-floor::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(90,48,16,0.15) 28px, rgba(90,48,16,0.15) 29px),
+                repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(90,48,16,0.15) 28px, rgba(90,48,16,0.15) 29px);
+    pointer-events: none;
+  }
+
+  .floor-title {
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 14px; color: var(--gold);
+    margin-bottom: 10px; position: relative; z-index:1;
+  }
+
+  .staff-floor { display: flex; flex-wrap: wrap; gap: 10px; position: relative; z-index:1; }
+
+  .staff-card {
+    background: var(--card2);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px;
+    width: 130px;
+    position: relative;
+    transition: all .3s;
+    cursor: default;
+  }
+  .staff-card:hover { border-color: var(--gold2); box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
+  .staff-card.working { border-color: var(--green); animation: pulse-work 2s infinite; }
+  .staff-card.resting { border-color: var(--text2); opacity: 0.7; }
+  .staff-card.boosted { border-color: var(--purple); box-shadow: 0 0 10px rgba(176,106,255,0.4); }
+
+  @keyframes pulse-work {
+    0%,100% { box-shadow: 0 0 0 0 rgba(76,217,100,0.3); }
+    50% { box-shadow: 0 0 0 6px rgba(76,217,100,0); }
+  }
+
+  .staff-emoji { font-size: 28px; display: block; text-align: center; }
+  .staff-name { font-size: 12px; font-weight: 700; text-align: center; margin: 4px 0 2px; color: var(--text); }
+  .staff-title { font-size: 9px; color: var(--text2); text-align: center; margin-bottom: 4px; }
+  .staff-skill { font-size: 9px; color: var(--blue); background: rgba(74,184,255,0.1); border-radius: 4px; padding: 2px 6px; text-align: center; margin-bottom: 4px; }
+  .staff-bar-wrap { background: #0a0a0a; border-radius: 4px; height: 5px; overflow: hidden; }
+  .staff-bar { height: 100%; border-radius: 4px; transition: width .5s; background: var(--green); }
+  .staff-morale { font-size: 9px; color: var(--text2); text-align: right; margin-top: 2px; }
+  .staff-dismiss {
+    position: absolute; top: 4px; right: 6px;
+    font-size: 11px; cursor: pointer; color: var(--text2);
+    transition: color .2s;
+  }
+  .staff-dismiss:hover { color: var(--red); }
+  .staff-buff-tag {
+    position: absolute; top: 4px; left: 6px;
+    font-size: 8px; background: var(--purple); color: #fff;
+    border-radius: 4px; padding: 1px 4px;
+  }
+
+  /* EVENTS */
+  .event-log {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    max-height: 200px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .event-list { overflow-y: auto; padding: 10px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .event-item {
+    background: var(--card2);
+    border-left: 3px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11px;
+    animation: slideIn .3s ease;
+  }
+  .event-item.good { border-color: var(--green); }
+  .event-item.bad { border-color: var(--red); }
+  .event-item.info { border-color: var(--blue); }
+  .event-item.special { border-color: var(--purple); }
+  @keyframes slideIn { from { opacity:0; transform: translateX(-10px); } to { opacity:1; transform: none; } }
+  .event-time { font-size: 9px; color: var(--text2); }
+
+  /* RIGHT PANEL */
+  .right-col { display: flex; flex-direction: column; gap: 14px; }
+
+  /* MENU / PRODUCTS */
+  .menu-item {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex; gap: 10px; align-items: center;
+    margin-bottom: 7px;
+    transition: all .2s;
+  }
+  .menu-item:hover { border-color: var(--gold2); }
+  .menu-emoji { font-size: 24px; }
+  .menu-info { flex: 1; }
+  .menu-name { font-size: 12px; font-weight: 600; }
+  .menu-desc { font-size: 9px; color: var(--text2); margin: 2px 0; }
+  .menu-price { font-size: 11px; color: var(--gold); }
+  .menu-popularity { font-size: 9px; color: var(--text2); }
+  .menu-pop-bar { background: #0a0a0a; border-radius: 3px; height: 4px; margin-top: 3px; overflow: hidden; }
+  .menu-pop-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width .5s; }
+
+  /* HIRE PANEL */
+  .hire-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 7px;
+    transition: all .2s;
+    cursor: pointer;
+    display: flex; gap: 10px; align-items: center;
+  }
+  .hire-card:hover:not(.hired) { border-color: var(--gold); background: #3a2010; }
+  .hire-card.hired { border-color: var(--text2); opacity: 0.4; cursor: not-allowed; }
+  .hire-emoji { font-size: 28px; }
+  .hire-info { flex: 1; }
+  .hire-name { font-size: 13px; font-weight: 700; }
+  .hire-skill-tag { font-size: 9px; color: var(--purple); margin: 2px 0; }
+  .hire-skill-desc { font-size: 9px; color: var(--text2); line-height: 1.4; }
+  .hire-cost { font-size: 12px; color: var(--gold); font-weight: 700; margin-top: 4px; }
+  .hire-rarity {
+    font-size: 9px; padding: 1px 6px; border-radius: 4px;
+    font-weight: 700; display: inline-block; margin-top: 2px;
+  }
+  .rare-N { background: #333; color: #aaa; }
+  .rare-R { background: #0a2a5a; color: var(--blue); }
+  .rare-SR { background: #2a0a5a; color: var(--purple); }
+  .rare-SSR { background: #5a3a00; color: var(--gold); }
+
+  /* RANDOM EVENT POPUP */
+  .event-popup {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.8);
+    background: var(--card2);
+    border: 2px solid var(--gold);
+    border-radius: 18px;
+    padding: 28px;
+    min-width: 340px;
+    max-width: 420px;
+    z-index: 1000;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 30px rgba(245,200,66,0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: all .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .event-popup.show { opacity: 1; transform: translate(-50%,-50%) scale(1); pointer-events: all; }
+  .popup-icon { font-size: 52px; margin-bottom: 10px; }
+  .popup-title { font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; color: var(--gold); margin-bottom: 8px; }
+  .popup-desc { font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 16px; }
+  .popup-choices { display: flex; flex-direction: column; gap: 8px; }
+  .popup-btn {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 16px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 12px;
+    transition: all .2s;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .popup-btn:hover { border-color: var(--gold); background: #3a2010; }
+  .popup-btn.good { border-color: var(--green); }
+  .popup-btn.bad { border-color: var(--red); }
+  .popup-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 999;
+    opacity: 0; pointer-events: none; transition: opacity .3s;
+  }
+  .popup-overlay.show { opacity: 1; pointer-events: all; }
+
+  /* SEASON / WEATHER */
+  .status-bar {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    padding: 8px 14px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .status-tag {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 10px;
+    display: flex; align-items: center; gap: 5px;
+  }
+
+  /* BUTTONS */
+  .btn {
+    background: linear-gradient(135deg, var(--gold2), var(--accent));
+    color: #1a0a00;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: all .2s;
+  }
+  .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-sm { padding: 5px 10px; font-size: 11px; }
+  .btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    border-radius: 8px; padding: 7px 14px;
+    font-size: 12px; cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: all .2s;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* NOTIFICATION */
+  .notif-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; z-index: 200; }
+  .notif {
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 14px;
+    font-size: 12px; max-width: 260px;
+    animation: notifIn .3s ease;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  }
+  .notif.good { border-color: var(--green); color: var(--green); }
+  .notif.bad { border-color: var(--red); color: var(--red); }
+  .notif.info { border-color: var(--blue); color: var(--blue); }
+  .notif.special { border-color: var(--purple); color: var(--purple); }
+  @keyframes notifIn { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform: none; } }
+
+  /* PROGRESS BARS */
+  .progress-row { margin-bottom: 8px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--text2); margin-bottom: 3px; }
+  .progress-track { background: #0a0a0a; border-radius: 4px; height: 7px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; transition: width .5s; }
+
+  /* REPUTATION */
+  .rep-stars { font-size: 18px; letter-spacing: 2px; }
+
+  /* RESEARCH */
+  .research-item {
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px;
+    margin-bottom: 7px; display: flex; gap: 10px; align-items: center;
+  }
+  .research-item.done { border-color: var(--green); opacity: 0.7; }
+  .research-icon { font-size: 22px; }
+  .research-info { flex: 1; }
+  .research-name { font-size: 12px; font-weight: 600; }
+  .research-desc { font-size: 9px; color: var(--text2); margin: 2px 0; }
+  .research-cost { font-size: 10px; color: var(--gold); }
+
+  /* TABS */
+  .tabs { display: flex; gap: 4px; padding: 10px 12px 0; background: var(--card); border-bottom: 1px solid var(--border); }
+  .tab {
+    padding: 6px 12px; font-size: 11px; border-radius: 8px 8px 0 0;
+    cursor: pointer; color: var(--text2); background: transparent;
+    border: 1px solid transparent; border-bottom: none;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: all .2s;
+  }
+  .tab.active { background: var(--card2); border-color: var(--border); color: var(--gold); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ACHIEVEMENTS */
+  .achieve-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .achieve-item {
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px; text-align: center;
+    transition: all .3s;
+  }
+  .achieve-item.unlocked { border-color: var(--gold); background: #2a1a00; }
+  .achieve-item.unlocked .achieve-icon { filter: none; }
+  .achieve-icon { font-size: 22px; filter: grayscale(1) opacity(0.4); }
+  .achieve-name { font-size: 9px; color: var(--text2); margin-top: 3px; }
+  .achieve-item.unlocked .achieve-name { color: var(--gold); }
+
+  /* SCROLL */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .section-divider { height: 1px; background: var(--border); margin: 8px 0; }
+
+  .gold-coin { display: inline-block; animation: spin3d 2s infinite linear; }
+  @keyframes spin3d { 0%,100%{transform:rotateY(0deg)} 50%{transform:rotateY(180deg)} }
+
+  .floating-gold {
+    position: fixed; pointer-events: none; z-index: 500;
+    font-size: 14px; color: var(--gold); font-weight: 700;
+    animation: floatUp 1s ease forwards;
+  }
+  @keyframes floatUp {
+    from { opacity:1; transform: translateY(0); }
+    to { opacity:0; transform: translateY(-60px); }
+  }
+
+  .hire-refresh-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .fire-btn { font-size: 10px; cursor: pointer; color: var(--red); margin-left: 6px; }
+
+  .crisis-bar {
+    background: var(--card2); border: 1.5px solid var(--red);
+    border-radius: 10px; padding: 8px 14px; margin-bottom: 8px;
+    font-size: 11px; color: var(--red);
+    animation: crisisPulse 1s infinite;
+  }
+  @keyframes crisisPulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+  .info-tip { font-size: 9px; color: var(--text2); font-style: italic; padding: 4px 8px; }
 </style>
 </head>
 <body>
-<div class="app">
 
-  <!-- Top bar -->
-  <div class="topbar">
-    <div>
-      <div class="cafe-name">☕ 小巷<span>咖啡馆</span></div>
-      <div style="font-size:0.7rem;color:var(--muted);margin-top:2px" id="cafeReputation">口碑: ★★★☆☆</div>
-    </div>
-    <div class="resources">
-      <div class="res"><span class="res-icon">💰</span><div><div class="res-val" id="resCoins">0</div><div class="res-label">营业额</div></div></div>
-      <div class="res"><span class="res-icon">⚡</span><div><div class="res-val" id="resPerSec">0/s</div><div class="res-label">收入速率</div></div></div>
-      <div class="res"><span class="res-icon">🌟</span><div><div class="res-val" id="resStars">0</div><div class="res-label">声望</div></div></div>
-      <div class="res"><span class="res-icon">👥</span><div><div class="res-val" id="resCustomers">0</div><div class="res-label">今日顾客</div></div></div>
-    </div>
-  </div>
+<!-- HIDDEN FILE INPUT -->
+<input type="file" id="avatarInput" accept="image/*" style="display:none">
 
-  <!-- Stats -->
-  <div class="stats-row">
-    <div class="stat-mini">
-      <div class="stat-mini-val" id="statTotal">¥0</div>
-      <div class="stat-mini-label">历史总收入</div>
-    </div>
-    <div class="stat-mini">
-      <div class="stat-mini-val" id="statUpgrades">0</div>
-      <div class="stat-mini-label">已购升级</div>
-    </div>
-    <div class="stat-mini">
-      <div class="stat-mini-val" id="statStaff">0</div>
-      <div class="stat-mini-label">员工数量</div>
-    </div>
-    <div class="stat-mini">
-      <div class="stat-mini-val" id="statMenuItems">1</div>
-      <div class="stat-mini-label">菜单品种</div>
-    </div>
-  </div>
-
-  <!-- Event box -->
-  <div id="eventBox" style="display:none"></div>
-
-  <!-- Cafe scene -->
-  <div class="cafe-scene">
-    <div class="scene-title">☕ 咖啡馆实况</div>
-    <div class="cafe-visual" id="cafeVisual"></div>
-    <div style="margin-top:0.8rem">
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:4px">今日目标进度</div>
-      <div class="prog-wrap"><div class="prog-bar" id="dailyProg" style="width:0%"></div></div>
-      <div style="font-size:0.7rem;color:var(--muted);margin-top:3px" id="dailyGoalText"></div>
-    </div>
-  </div>
-
-  <!-- Tabs -->
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab('menu')">🍵 菜单</div>
-    <div class="tab" onclick="switchTab('equipment')">🔧 设备</div>
-    <div class="tab" onclick="switchTab('staff')">👤 员工</div>
-    <div class="tab" onclick="switchTab('decor')">🌿 装修</div>
-  </div>
-
-  <!-- Tab: Menu -->
-  <div class="tab-content active" id="tab-menu">
-    <div class="panel-grid" id="menuGrid"></div>
-  </div>
-
-  <!-- Tab: Equipment -->
-  <div class="tab-content" id="tab-equipment">
-    <div class="panel-grid" id="equipGrid"></div>
-  </div>
-
-  <!-- Tab: Staff -->
-  <div class="tab-content" id="tab-staff">
-    <div class="panel-grid" id="staffGrid"></div>
-  </div>
-
-  <!-- Tab: Decor -->
-  <div class="tab-content" id="tab-decor">
-    <div class="panel-grid" id="decorGrid"></div>
-  </div>
-
-  <!-- Log -->
-  <div class="log-area" id="logArea"></div>
+<!-- STATUS BAR -->
+<div class="status-bar" id="statusBar">
+  <div class="status-tag">☀️ <span id="weatherLabel">晴天</span></div>
+  <div class="status-tag">🌸 <span id="seasonLabel">春季</span></div>
+  <div class="status-tag">⭐ 声望 <span id="repLabel">1星</span></div>
+  <div class="status-tag">👥 客流 <span id="custLabel">一般</span></div>
+  <div class="status-tag">🔥 今日营业: <span id="salesLabel">0</span>杯</div>
+  <div class="status-tag" style="margin-left:auto;">📅 下次事件: <span id="nextEventLabel">--</span>秒</div>
 </div>
 
+<!-- HEADER -->
+<div class="header">
+  <div class="avatar-wrap" id="avatarWrap">
+    <img id="avatarImg" src="/assets/head.png" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'50\' fill=\'%23f5c842\'/><text y=\'62\' x=\'50\' text-anchor=\'middle\' font-size=\'50\'>🐱</text></svg>'" alt="头像">
+    <div class="upload-hint">点击上传</div>
+  </div>
+  <div>
+    <div class="shop-title">☕ 小面的咖啡厅·面厅</div>
+    <div class="shop-subtitle">一家充满奇妙故事的小店</div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-box">
+      <div class="stat-label">💰 金币</div>
+      <div class="stat-value" id="goldDisplay">500</div>
+      <div class="stat-rate" id="rateDisplay">+0/秒</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">📦 今日收入</div>
+      <div class="stat-value" id="incomeDisplay">0</div>
+      <div class="stat-rate">日结算</div>
+    </div>
+    <div class="day-box">
+      <div class="day-label">经营天数</div>
+      <div class="day-value" id="dayDisplay">第1天</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- LEFT: UPGRADES + RESEARCH -->
+  <div>
+    <div class="panel" style="margin-bottom:14px;">
+      <div class="tabs" id="leftTabs">
+        <div class="tab active" onclick="switchTab('left','upgrade')">🏪 装修</div>
+        <div class="tab" onclick="switchTab('left','research')">🔬 研发</div>
+        <div class="tab" onclick="switchTab('left','achieve')">🏆 成就</div>
+      </div>
+      <div class="panel-body">
+        <!-- UPGRADES -->
+        <div class="tab-content active" id="left-upgrade">
+          <div class="upgrade-grid" id="upgradeGrid"></div>
+        </div>
+        <!-- RESEARCH -->
+        <div class="tab-content" id="left-research">
+          <div id="researchList"></div>
+        </div>
+        <!-- ACHIEVEMENTS -->
+        <div class="tab-content" id="left-achieve">
+          <div class="achieve-grid" id="achieveGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHOP STATUS -->
+    <div class="panel">
+      <div class="panel-header">📊 店铺状态</div>
+      <div class="panel-body">
+        <div class="progress-row">
+          <div class="progress-label"><span>😊 顾客满意度</span><span id="satisfactionVal">50%</span></div>
+          <div class="progress-track"><div class="progress-fill" id="satisfactionBar" style="width:50%;background:var(--green)"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label"><span>✨ 店铺清洁度</span><span id="cleanVal">80%</span></div>
+          <div class="progress-track"><div class="progress-fill" id="cleanBar" style="width:80%;background:var(--blue)"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label"><span>📦 食材库存</span><span id="stockVal">100%</span></div>
+          <div class="progress-track"><div class="progress-fill" id="stockBar" style="width:100%;background:var(--accent)"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label"><span>⚡ 员工士气</span><span id="moraleVal">70%</span></div>
+          <div class="progress-track"><div class="progress-fill" id="moraleBar" style="width:70%;background:var(--purple)"></div></div>
+        </div>
+        <div class="section-divider"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-sm" onclick="restock()">🛒 补货 (50💰)</button>
+          <button class="btn btn-sm" onclick="cleanShop()">🧹 打扫 (30💰)</button>
+          <button class="btn btn-sm" onclick="staffParty()">🎉 员工聚会 (100💰)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER: FLOOR + EVENTS -->
+  <div class="cafe-section">
+    <div class="cafe-floor">
+      <div class="floor-title">🏠 面厅一楼 — 员工在岗</div>
+      <div class="staff-floor" id="staffFloor">
+        <div style="color:var(--text2);font-size:12px;padding:20px;text-align:center;width:100%;">
+          还没有招募员工，去右侧招募面板雇用员工吧！
+        </div>
+      </div>
+    </div>
+
+    <!-- CRISIS AREA -->
+    <div id="crisisArea"></div>
+
+    <!-- EVENT LOG -->
+    <div class="event-log panel">
+      <div class="panel-header">📜 事件日志
+        <button class="btn-outline" style="margin-left:auto;padding:3px 10px;font-size:10px;" onclick="clearLog()">清空</button>
+      </div>
+      <div class="event-list" id="eventList">
+        <div class="event-item info">
+          <div class="event-time">开业第一天</div>
+          <div>欢迎来到小面的咖啡厅·面厅！点击升级、雇用员工开始经营吧～</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MINI ACTIONS -->
+    <div class="panel">
+      <div class="panel-header">⚡ 即时操作</div>
+      <div class="panel-body" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn" onclick="doMarketing()">📣 打广告 (80💰)</button>
+        <button class="btn" onclick="doSpecialDeal()">🎁 限时特惠</button>
+        <button class="btn" onclick="triggerInspection()">🔍 模拟检查</button>
+        <button class="btn btn-outline" onclick="skipDay()">⏭ 跳过一天</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: MENU + HIRE -->
+  <div class="right-col">
+    <!-- MENU -->
+    <div class="panel">
+      <div class="tabs" id="rightTabs">
+        <div class="tab active" onclick="switchTab('right','menu')">☕ 菜单</div>
+        <div class="tab" onclick="switchTab('right','hire')">👤 招募</div>
+        <div class="tab" onclick="switchTab('right','market')">📈 市场</div>
+      </div>
+      <div class="panel-body">
+        <div class="tab-content active" id="right-menu">
+          <div id="menuList"></div>
+        </div>
+        <div class="tab-content" id="right-hire">
+          <div class="hire-refresh-row">
+            <span style="font-size:11px;color:var(--text2);">随机候选员工</span>
+            <button class="btn btn-sm" onclick="refreshHirePool()">🔄 刷新 (20💰)</button>
+          </div>
+          <div id="hireList"></div>
+          <div class="info-tip">💡 员工各有奇特技能，策略搭配收益翻倍！</div>
+        </div>
+        <div class="tab-content" id="right-market">
+          <div id="marketPanel"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP OVERLAY -->
+<div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
+<div class="event-popup" id="eventPopup">
+  <div class="popup-icon" id="popupIcon">🎲</div>
+  <div class="popup-title" id="popupTitle">随机事件</div>
+  <div class="popup-desc" id="popupDesc">描述</div>
+  <div class="popup-choices" id="popupChoices"></div>
+</div>
+
+<!-- NOTIF CONTAINER -->
+<div class="notif-container" id="notifContainer"></div>
+
 <script>
-// ── State ────────────────────────────────────────────────
+// ============================================================
+// GAME STATE
+// ============================================================
 const G = {
-  coins: 30,
-  totalCoins: 0,
-  stars: 0,
-  customers: 0,
-  perSec: 0,
-  reputation: 3,
-  upgradeCount: 0,
-  staffCount: 0,
-  menuCount: 1,
-  time: 0,
-  dailyGoal: 500,
-  dailyEarned: 0,
-  dayCount: 1,
-  multiplier: 1,
-  autoMultiplier: 1,
-  eventCooldown: 0,
+  gold: 500,
+  goldRate: 0,
+  totalEarned: 0,
+  day: 1,
+  dayIncome: 0,
+  satisfaction: 50,
+  cleanliness: 80,
+  stock: 100,
+  morale: 70,
+  reputation: 1,
+  sales: 0,
+  weather: 'sunny',
+  season: 'spring',
+  staff: [],
+  upgrades: {},
+  research: {},
+  achievements: {},
+  marketEvents: [],
+  activeBuffs: [],
+  eventTimer: 0,
+  nextEventIn: 45,
+  dayTimer: 0,
+  dayLength: 120,
+  menuPrices: {},
+  popularityBoost: 0,
+  hirePool: [],
+  crises: [],
+  inspectionPassed: 0,
 };
 
-// ── Data ─────────────────────────────────────────────────
-const MENU = [
-  { id:'espresso', name:'意式浓缩', icon:'☕', desc:'经典浓缩，快速出杯', base:0.8, cost:0, level:1, maxLevel:5, unlocked:true, costPerLevel: i=>[0,80,200,500,1200][i] },
-  { id:'latte', name:'拿铁', icon:'🥛', desc:'奶味丰富，深受好评', base:1.5, cost:120, level:0, maxLevel:5, unlocked:false, costPerLevel: i=>[120,300,700,1500,3000][i] },
-  { id:'matcha', name:'抹茶拿铁', icon:'🍵', desc:'清新健康，网红爆款', base:2.2, cost:400, level:0, maxLevel:5, unlocked:false, costPerLevel: i=>[400,900,2000,4000,8000][i] },
-  { id:'cake', name:'芝士蛋糕', icon:'🍰', desc:'甜品搭档，提升客单价', base:3.5, cost:1000, level:0, maxLevel:4, unlocked:false, costPerLevel: i=>[1000,2500,6000,12000][i] },
-  { id:'smoothie', name:'水果特调', icon:'🥤', desc:'应季水果，限时爆品', base:2.8, cost:800, level:0, maxLevel:4, unlocked:false, costPerLevel: i=>[800,2000,5000,10000][i] },
-  { id:'wagyu', name:'和牛三明治', icon:'🥪', desc:'高端餐食，利润丰厚', base:6.0, cost:5000, level:0, maxLevel:3, unlocked:false, costPerLevel: i=>[5000,12000,25000][i] },
+// ============================================================
+// STAFF DEFINITIONS
+// ============================================================
+const ALL_STAFF = [
+  {
+    id:'dogTeacher', name:'狗狗老师', emoji:'🐕‍🦺', title:'资深教育家',
+    rarity:'SR', hireCost: 180,
+    skill:'🎓 课后补习',
+    skillDesc:'每隔30秒给所有员工+5士气，满意度+3%',
+    baseRate: 2.5,
+    passive: (g) => {
+      if(Math.random()<0.016){ g.morale = Math.min(100, g.morale+5); g.satisfaction = Math.min(100, g.satisfaction+3); notify('🐕‍🦺 狗狗老师给大家上了一课，士气+5！','special'); }
+    }
+  },
+  {
+    id:'potato', name:'土豆', emoji:'🥔', title:'吃货专家',
+    rarity:'N', hireCost: 60,
+    skill:'🍟 大胃王',
+    skillDesc:'消耗食材快但收入+20%，库存警告时触发危机',
+    baseRate: 3.5,
+    passive: (g) => {
+      g.stock = Math.max(0, g.stock - 0.02);
+    },
+    modifier: (rate) => rate * 1.2,
+  },
+  {
+    id:'fuzai', name:'福仔', emoji:'🐼', title:'幸运使者',
+    rarity:'R', hireCost: 120,
+    skill:'🍀 福星高照',
+    skillDesc:'随机事件触发时有30%概率变为正面结果',
+    baseRate: 2.0,
+    passive: (g) => {
+      // handled in event system
+    }
+  },
+  {
+    id:'maggot', name:'一只蛆', emoji:'🪱', title:'神秘存在',
+    rarity:'SSR', hireCost: 500,
+    skill:'🌀 逆天改命',
+    skillDesc:'每天0点重置一个负面效果，金币-0/秒但特殊加成极高',
+    baseRate: 0,
+    passive: (g) => {
+      // special daily reset handled in day settlement
+    },
+    modifier: (rate) => rate + 8,
+  },
+  {
+    id:'boBo', name:'啵啵', emoji:'🐟', title:'海洋系打工仔',
+    rarity:'R', hireCost: 100,
+    skill:'🌊 海风加成',
+    skillDesc:'雨天和阴天收益×2，晴天收益×0.8',
+    baseRate: 2.8,
+    passive: (g) => {
+      // weather modifier handled elsewhere
+    }
+  },
+  {
+    id:'shark', name:'鲨鱼', emoji:'🦈', title:'营销总监',
+    rarity:'SR', hireCost: 220,
+    skill:'💼 鲨鱼营销',
+    skillDesc:'广告效果持续翻倍，声望增长+50%',
+    baseRate: 3.0,
+    passive: (g) => {
+      if(Math.random()<0.004){ g.reputation = Math.min(5, g.reputation+0.01); }
+    }
+  },
+  {
+    id:'potatoThunder', name:'土豆雷', emoji:'⚡🥔', title:'厨神传承者',
+    rarity:'SR', hireCost: 200,
+    skill:'⚡ 闪电下单',
+    skillDesc:'销量+40%，但每天有10%概率设备故障',
+    baseRate: 4.5,
+    passive: (g) => {
+      if(Math.random()<0.0003){
+        addCrisis('⚡ 土豆雷手速太快，咖啡机爆炸了！维修费150💰或停业1分钟', 150);
+      }
+    },
+    modifier: (rate) => rate * 1.4,
+  },
+  {
+    id:'fatCat2', name:'胖猫二号', emoji:'🐈', title:'首席懒汉官',
+    rarity:'SSR', hireCost: 800,
+    skill:'😴 躺赢哲学',
+    skillDesc:'在岗时随机时刻触发"灵感爆发"，单次+50~200💰',
+    baseRate: 1.5,
+    passive: (g) => {
+      if(Math.random()<0.002){
+        const bonus = 50 + Math.floor(Math.random()*151);
+        g.gold += bonus; g.dayIncome += bonus;
+        floatGold(`+${bonus}💰`, document.getElementById('staffFloor'));
+        notify(`🐈 胖猫二号突发灵感！获得 ${bonus}💰！`, 'special');
+      }
+    }
+  },
 ];
 
-const EQUIPMENT = [
-  { id:'machine', name:'咖啡机', icon:'⚙️', desc:'升级后出杯更快，收入翻倍', level:1, maxLevel:5, effect: l=>`收入速率 ×${[1,1.5,2.2,3.2,4.5][l-1]}`, mult: l=>[1,1.5,2.2,3.2,4.5][l-1], costPerLevel: i=>[150,400,1000,2500,6000][i] },
-  { id:'grinder', name:'手冲套装', icon:'🫙', desc:'提升咖啡品质，吸引更多顾客', level:0, maxLevel:4, effect: l=>`声望+${l*2}，顾客量+${l*10}%`, mult: l=>1+l*0.15, costPerLevel: i=>[200,600,1500,4000][i], unlocked:false },
-  { id:'pos', name:'收银系统', icon:'🖥️', desc:'自动化收银，减少遗漏', level:0, maxLevel:3, effect: l=>`每秒多收 +${l*0.5}金`, mult: l=>1, bonus: l=>l*0.5, costPerLevel: i=>[350,900,2200][i], unlocked:false },
-  { id:'fridge', name:'冷藏展示柜', icon:'🧊', desc:'展示商品，提升冲动消费', level:0, maxLevel:3, effect: l=>`全品收入 ×${[1,1.2,1.45,1.75][l]}`, mult: l=>[1,1.2,1.45,1.75][l], costPerLevel: i=>[500,1300,3500][i], unlocked:false },
-  { id:'roaster', name:'烘豆机', icon:'🔥', desc:'自己烘豆，大幅降低成本', level:0, maxLevel:3, effect: l=>`全部乘数 ×${[1,1.4,2.0,3.0][l]}`, mult: l=>[1,1.4,2.0,3.0][l], costPerLevel: i=>[2000,5000,12000][i], unlocked:false },
+// ============================================================
+// UPGRADES
+// ============================================================
+const UPGRADES = [
+  { id:'table', icon:'🪑', name:'座位扩张', desc:'每级+0.5/秒', maxLevel:5, baseCost:100, costMult:1.8, ratePerLevel:0.5 },
+  { id:'machine', icon:'☕', name:'咖啡机升级', desc:'每级+0.8/秒', maxLevel:5, baseCost:150, costMult:2.0, ratePerLevel:0.8 },
+  { id:'deco', icon:'🌸', name:'装修美化', desc:'满意度+5%/级', maxLevel:4, baseCost:200, costMult:2.2, ratePerLevel:0 },
+  { id:'kitchen', icon:'🍜', name:'面食厨房', desc:'每级+1.2/秒', maxLevel:5, baseCost:250, costMult:2.5, ratePerLevel:1.2 },
+  { id:'wifi', icon:'📶', name:'超强WiFi', desc:'客流+10%/级', maxLevel:3, baseCost:300, costMult:3.0, ratePerLevel:0.3 },
+  { id:'signage', icon:'🪧', name:'招牌灯箱', desc:'声望+0.5/级', maxLevel:3, baseCost:180, costMult:2.5, ratePerLevel:0 },
+  { id:'storage', icon:'📦', name:'冷链仓储', desc:'库存消耗-20%/级', maxLevel:3, baseCost:220, costMult:2.8, ratePerLevel:0 },
+  { id:'loyalty', icon:'💳', name:'会员系统', desc:'每级+0.6/秒', maxLevel:5, baseCost:350, costMult:2.3, ratePerLevel:0.6 },
 ];
 
-const STAFF = [
-  { id:'barista', name:'兼职咖啡师', icon:'🧑‍🍳', desc:'自动制作基础饮品', level:0, maxLevel:5, perSec: l=>l*0.4, costPerLevel: i=>[100,280,700,1800,4500][i], unlocked:true },
-  { id:'waiter', name:'服务员', icon:'🙋', desc:'提升客户满意度，带来回头客', level:0, maxLevel:4, mult: l=>1+l*0.12, costPerLevel: i=>[250,700,1800,4500][i], unlocked:false },
-  { id:'manager', name:'店长助理', icon:'👔', desc:'管理效率翻倍，全局增益', level:0, maxLevel:3, mult: l=>1+l*0.3, costPerLevel: i=>[1200,3000,8000][i], unlocked:false },
-  { id:'influencer', name:'网红合作', icon:'📱', desc:'社媒引流，爆发式获客', level:0, maxLevel:3, burst: l=>l*2, costPerLevel: i=>[2500,6000,15000][i], unlocked:false },
-  { id:'chef', name:'甜品主厨', icon:'👨‍🍳', desc:'专属甜品制作，提升品类收入', level:0, maxLevel:3, mult: l=>1+l*0.5, costPerLevel: i=>[4000,10000,22000][i], unlocked:false },
+// ============================================================
+// RESEARCH
+// ============================================================
+const RESEARCH = [
+  { id:'latte', icon:'☕', name:'拉花技术', desc:'咖啡售价+15%', cost:300 },
+  { id:'noodle', icon:'🍜', name:'秘制面汤', desc:'面食收益×1.5', cost:400 },
+  { id:'combo', icon:'🎁', name:'套餐搭配', desc:'每单额外+1💰', cost:250 },
+  { id:'green', icon:'🌿', name:'有机认证', desc:'满意度上限+10%', cost:500 },
+  { id:'ai', icon:'🤖', name:'AI点单系统', desc:'销量+25%', cost:600 },
+  { id:'app', icon:'📱', name:'外卖小程序', desc:'雨天收益不降', cost:450 },
 ];
 
-const DECOR = [
-  { id:'plants', name:'绿植装饰', icon:'🪴', desc:'自然氛围，顾客停留更久', level:0, maxLevel:3, mult: l=>[1,1.1,1.25,1.45][l], costPerLevel: i=>[180,500,1400][i], unlocked:true },
-  { id:'lighting', name:'暖光灯具', icon:'💡', desc:'营造舒适氛围，提升拍照率', level:0, maxLevel:3, mult: l=>[1,1.15,1.35,1.6][l], costPerLevel: i=>[300,800,2000][i], unlocked:false },
-  { id:'music', name:'背景音乐系统', icon:'🎵', desc:'精选歌单，延长顾客停留时间', level:0, maxLevel:3, mult: l=>[1,1.12,1.3,1.55][l], costPerLevel: i=>[450,1100,2800][i], unlocked:false },
-  { id:'outdoor', name:'户外座位', icon:'⛱️', desc:'扩大座位容量，接待更多客人', level:0, maxLevel:3, mult: l=>[1,1.2,1.45,1.8][l], costPerLevel: i=>[700,1800,4500][i], unlocked:false },
-  { id:'neon', name:'霓虹招牌', icon:'✨', desc:'夜晚打卡圣地，吸引晚间顾客', level:0, maxLevel:2, mult: l=>[1,1.5,2.2][l], costPerLevel: i=>[3000,8000][i], unlocked:false },
+// ============================================================
+// MENU
+// ============================================================
+const MENU_ITEMS = [
+  { id:'espresso', emoji:'☕', name:'浓缩咖啡', desc:'招牌单品', basePrice:12, popularity:80 },
+  { id:'latte', emoji:'🥛', name:'拿铁', desc:'奶香四溢', basePrice:18, popularity:90 },
+  { id:'noodle', emoji:'🍜', name:'招牌小面', desc:'秘制老汤', basePrice:25, popularity:70 },
+  { id:'cake', emoji:'🎂', name:'抹茶蛋糕', desc:'手作限量', basePrice:30, popularity:60 },
+  { id:'bubble', emoji:'🧋', name:'珍珠奶茶', desc:'Q弹爆浆', basePrice:20, popularity:85 },
+  { id:'cold', emoji:'🧊', name:'冷萃冰咖', desc:'夏日热销', basePrice:22, popularity:65 },
 ];
 
-const EVENTS = [
-  { icon:'🌧️', title:'下雨天！', desc:'坏天气让外出的人都想来喝咖啡，客流量激增！', choices:[
-    {label:'✅ 趁机促销',good:true,fn:()=>{addCoins(G.perSec*30);addLog('雨天促销大获成功！+额外30秒收入','gold')}},
-    {label:'💤 正常营业',good:false,fn:()=>addLog('维持正常运营，错过了雨天红利')},
-  ]},
-  { icon:'📸', title:'博主来打卡！', desc:'一位美食博主进店，想要拍摄你的招牌产品！', choices:[
-    {label:'🤝 热情接待',good:true,fn:()=>{G.stars+=50;G.multiplier*=1.3;setTimeout(()=>G.multiplier/=1.3,30000);addLog('博主发布了推荐帖！声望+50，收入30秒内×1.3','event')}},
-    {label:'🙅 婉拒',good:false,fn:()=>addLog('婉拒了博主的请求，没有波澜')},
-  ]},
-  { icon:'⚠️', title:'咖啡机故障！', desc:'主力咖啡机突然罢工，需要立即处理！', choices:[
-    {label:'💰 花费维修 (-200¥)',good:false,fn:()=>{if(G.coins>=200){G.coins-=200;addLog('花费¥200维修了咖啡机，恢复正常运营','bad')}else{addLog('没有足够的钱维修，收入减半10秒','bad');G.multiplier*=0.5;setTimeout(()=>G.multiplier*=2,10000)}}},
-    {label:'🛠️ 手动应急',good:false,fn:()=>{G.multiplier*=0.7;setTimeout(()=>G.multiplier/=0.7,20000);addLog('手动应急，20秒内收入-30%','bad')}},
-  ]},
-  { icon:'🎉', title:'周年纪念日！', desc:'咖啡馆开业纪念日，老顾客纷纷回来捧场！', choices:[
-    {label:'🎁 发放优惠券',good:true,fn:()=>{G.customers+=100;addCoins(G.perSec*50);addLog('发放优惠券！涌入100位顾客，额外50秒收入','gold')}},
-    {label:'🎂 低调庆祝',good:true,fn:()=>{G.stars+=30;addLog('低调庆祝，声望+30','event')}},
-  ]},
-  { icon:'👩‍💼', title:'检查员来访', desc:'卫生部门突击检查，你的咖啡馆准备好了吗？', choices:[
-    {label:'😎 自信迎检',good:true,fn:()=>{const pass=Math.random()>0.3;if(pass){G.stars+=40;addLog('检查顺利通过！声望+40，政府认证加成！','event')}else{addLog('检查发现小问题，被要求整改…','bad');G.multiplier*=0.8;setTimeout(()=>G.multiplier/=0.8,15000)}}},
-    {label:'📋 临时补救',good:false,fn:()=>{G.coins-=100;addLog('花费¥100应急补救，勉强通过检查')}},
-  ]},
-  { icon:'❄️', title:'夏日特饮季！', desc:'天气炎热，冰饮需求暴增！推出夏日特调？', choices:[
-    {label:'🍋 推出冰品',good:true,fn:()=>{G.multiplier*=1.5;setTimeout(()=>G.multiplier/=1.5,40000);addLog('夏日冰品大卖！40秒内收入×1.5！','gold')}},
-    {label:'📋 维持原菜单',good:false,fn:()=>addLog('保守经营，错过了夏日旺季')},
-  ]},
-  { icon:'🏫', title:'附近开了大学！', desc:'一所大学在附近开学，大量学生客群涌入！', choices:[
-    {label:'📚 推出学生套餐',good:true,fn:()=>{G.customers+=200;G.stars+=20;addLog('学生套餐大受欢迎！+200顾客，声望+20','event')}},
-    {label:'💼 坚持原有定位',good:false,fn:()=>addLog('坚持高端定位，学生流失了一部分')},
-  ]},
+// ============================================================
+// ACHIEVEMENTS
+// ============================================================
+const ACHIEVEMENTS = [
+  { id:'first100', icon:'💰', name:'首赚百金', condition:(g)=>g.totalEarned>=100 },
+  { id:'first1000', icon:'🏆', name:'千金富翁', condition:(g)=>g.totalEarned>=1000 },
+  { id:'staff3', icon:'👥', name:'团队初建', condition:(g)=>g.staff.length>=3 },
+  { id:'staff8', icon:'🎪', name:'大家庭', condition:(g)=>g.staff.length>=8 },
+  { id:'rep5', icon:'⭐', name:'五星名店', condition:(g)=>g.reputation>=5 },
+  { id:'day10', icon:'📅', name:'十日坚守', condition:(g)=>g.day>=10 },
+  { id:'fatcat', icon:'🐈', name:'请来胖猫', condition:(g)=>g.staff.some(s=>s.id==='fatCat2') },
+  { id:'maggot', icon:'🪱', name:'神秘招募', condition:(g)=>g.staff.some(s=>s.id==='maggot') },
+  { id:'fullteam', icon:'🌟', name:'全员到齐', condition:(g)=>g.staff.length>=8 },
+  { id:'crisis', icon:'🔥', name:'化险为夷', condition:(g)=>g.inspectionPassed>=1 },
 ];
 
-// ── Engine ───────────────────────────────────────────────
-function calcPerSec(){
-  let base = 0;
-  // Menu contributions
-  MENU.forEach(m=>{ if(m.level>0) base += m.base * m.level; });
-  // Staff auto
-  let staffBonus = 0;
-  STAFF.forEach(s=>{ if(s.level>0 && s.perSec) staffBonus += s.perSec(s.level); });
-  // Equipment machine mult
-  const machine = EQUIPMENT.find(e=>e.id==='machine');
-  const machMult = machine.level>0 ? machine.mult(machine.level) : 1;
-  // Fridge
-  const fridge = EQUIPMENT.find(e=>e.id==='fridge');
-  const fridgeMult = fridge.level>0 ? fridge.mult(fridge.level) : 1;
-  // Roaster
-  const roaster = EQUIPMENT.find(e=>e.id==='roaster');
-  const roasterMult = roaster.level>0 ? roaster.mult(roaster.level) : 1;
-  // Waiter
-  const waiter = STAFF.find(s=>s.id==='waiter');
-  const waiterMult = waiter.level>0 ? waiter.mult(waiter.level) : 1;
-  // Manager
-  const manager = STAFF.find(s=>s.id==='manager');
-  const managerMult = manager.level>0 ? manager.mult(manager.level) : 1;
-  // Chef
-  const chef = STAFF.find(s=>s.id==='chef');
-  const chefMult = chef.level>0 ? chef.mult(chef.level) : 1;
-  // Decor
-  let decorMult = 1;
-  DECOR.forEach(d=>{ if(d.level>0) decorMult *= d.mult(d.level); });
-  // POS bonus
-  const pos = EQUIPMENT.find(e=>e.id==='pos');
-  const posBonus = pos.level>0 ? pos.bonus(pos.level) : 0;
+// ============================================================
+// RANDOM EVENTS
+// ============================================================
+const RANDOM_EVENTS = [
+  {
+    id:'inspector', icon:'🔍', title:'神秘食品检查员',
+    desc:'一位严肃的检查员推开了门，审视着四周……',
+    choices:[
+      { text:'🌟 全力配合 (满意度≥70通过)', action:(g)=>{
+        if(g.satisfaction>=70){ addLog('检查顺利通过！声望+1，奖励200💰','good'); g.reputation=Math.min(5,g.reputation+1); g.gold+=200; g.dayIncome+=200; g.inspectionPassed++; }
+        else{ addLog('检查未通过！罚款100💰，声望-0.5','bad'); g.gold=Math.max(0,g.gold-100); g.reputation=Math.max(1,g.reputation-0.5); }
+      }},
+      { text:'🤫 悄悄打点 (-80💰，必定通过)', action:(g)=>{ g.gold=Math.max(0,g.gold-80); addLog('检查员点了点头，悄悄离开了……','info'); g.inspectionPassed++; } },
+    ]
+  },
+  {
+    id:'vip', icon:'👑', title:'VIP顾客驾到',
+    desc:'一位网红达人带着摄像团队走进了面厅！',
+    choices:[
+      { text:'🎬 全力配合拍摄 (声望+1，金币+300)', action:(g)=>{ g.reputation=Math.min(5,g.reputation+1); g.gold+=300; g.dayIncome+=300; addLog('视频爆火！全城都知道小面的咖啡厅了！','good'); } },
+      { text:'🙅 保护隐私拒绝', action:(g)=>{ addLog('顾客有些失望地离开了……','info'); } },
+    ]
+  },
+  {
+    id:'storm', icon:'⛈️', title:'暴风雨来袭',
+    desc:'突然乌云密布，暴雨倾盆，顾客纷纷观望……',
+    choices:[
+      { text:'🌂 免费提供雨伞 (-50💰，满意度+15)', action:(g)=>{ g.gold=Math.max(0,g.gold-50); g.satisfaction=Math.min(100,g.satisfaction+15); addLog('顾客感动不已，纷纷晒图！','good'); } },
+      { text:'📦 关门提前收摊', action:(g)=>{ addLog('今天少了不少生意……收入-30%','bad'); G.goldRate*=0.7; setTimeout(()=>G.goldRate/=0.7,30000); } },
+      { text:'☕ 推出雨天特饮', action:(g)=>{ g.gold+=150; g.dayIncome+=150; addLog('雨天限定咖啡大卖！+150💰','good'); } },
+    ]
+  },
+  {
+    id:'rival', icon:'🏪', title:'竞争对手开张',
+    desc:'隔壁新开了一家奶茶店，正在大搞开业促销！',
+    choices:[
+      { text:'💥 降价反击', action:(g)=>{ addLog('价格战开始！短期收入-20%，但客流量增加','info'); G.goldRate*=0.8; setTimeout(()=>G.goldRate/=0.8,60000); g.sales+=20; } },
+      { text:'🤝 差异化竞争', action:(g)=>{ g.satisfaction=Math.min(100,g.satisfaction+10); addLog('专注特色，顾客更爱小面的咖啡厅！满意度+10','good'); } },
+      { text:'🍜 推出限定套餐', action:(g)=>{ g.gold+=200; g.dayIncome+=200; addLog('限定面咖套餐大受欢迎！+200💰','good'); } },
+    ]
+  },
+  {
+    id:'fire', icon:'🔥', title:'厨房突发小火',
+    desc:'烤箱冒烟了！员工们手忙脚乱！',
+    choices:[
+      { text:'🧯 立刻扑灭 (清洁-20，损失50💰)', action:(g)=>{ g.cleanliness=Math.max(0,g.cleanliness-20); g.gold=Math.max(0,g.gold-50); addLog('火被扑灭，不过厨房乱了一团……','bad'); } },
+      { text:'🚒 呼叫消防队 (损失200💰，但更安全)', action:(g)=>{ g.gold=Math.max(0,g.gold-200); g.satisfaction=Math.max(0,g.satisfaction-5); addLog('消防队迅速处理，损失较大……','bad'); } },
+    ]
+  },
+  {
+    id:'media', icon:'📰', title:'报社采访',
+    desc:'《美食周刊》记者前来采访，想写一篇专题报道！',
+    choices:[
+      { text:'📸 接受采访', action:(g)=>{ g.reputation=Math.min(5,g.reputation+0.5); addLog('报道发出后，声望+0.5！周末客流暴增！','good'); G.goldRate*=1.3; setTimeout(()=>G.goldRate/=1.3,90000); } },
+      { text:'🤐 低调婉拒', action:(g)=>{ addLog('保持神秘感……也许下次吧','info'); } },
+    ]
+  },
+  {
+    id:'supply', icon:'📦', title:'供应商断货',
+    desc:'主要供应商告知本月咖啡豆紧缺，价格上涨50%！',
+    choices:[
+      { text:'💰 高价收购 (-200💰)', action:(g)=>{ g.gold=Math.max(0,g.gold-200); g.stock=Math.min(100,g.stock+30); addLog('花大价钱维持了库存，生意照常！','info'); } },
+      { text:'🔄 紧急换供应商', action:(g)=>{ addLog('新供应商质量一般，满意度-10','bad'); g.satisfaction=Math.max(0,g.satisfaction-10); } },
+      { text:'🍜 临时主推面食', action:(g)=>{ g.gold+=100; g.dayIncome+=100; addLog('机智！面食大卖，额外+100💰','good'); } },
+    ]
+  },
+  {
+    id:'pet', icon:'🐱', title:'流浪猫进店',
+    desc:'一只橘猫悄悄溜进了面厅，顾客们纷纷拍照……',
+    choices:[
+      { text:'😸 收留它当吉祥物', action:(g)=>{ g.satisfaction=Math.min(100,g.satisfaction+20); addLog('猫猫镇店！满意度飙升+20！小红书爆了！','good'); G.goldRate*=1.1; } },
+      { text:'😅 礼貌请出去', action:(g)=>{ addLog('猫猫被请出，顾客有些失望……','info'); } },
+    ]
+  },
+  {
+    id:'holiday', icon:'🎉', title:'节日营销机会',
+    desc:'明天是个重要节日，提前策划活动可以大赚一笔！',
+    choices:[
+      { text:'🎊 全力备货 (-150💰，次日收益×2)', action:(g)=>{ g.gold=Math.max(0,g.gold-150); addLog('节日活动准备就绪！明天加油！','good'); G.goldRate*=2; setTimeout(()=>G.goldRate/=2,120000); } },
+      { text:'🎁 推出礼品卡', action:(g)=>{ g.gold+=120; g.dayIncome+=120; addLog('礼品卡热销！+120💰','good'); } },
+      { text:'😌 正常营业', action:(g)=>{ addLog('稳健经营，错过了一些机会……','info'); } },
+    ]
+  },
+  {
+    id:'complaint', icon:'😡', title:'投诉风波',
+    desc:'一位顾客在大众点评给了1星差评，说等待时间太长！',
+    choices:[
+      { text:'🎁 私信道歉送券 (-50💰)', action:(g)=>{ g.gold=Math.max(0,g.gold-50); g.satisfaction=Math.min(100,g.satisfaction+10); addLog('危机公关成功，口碑回升！','good'); } },
+      { text:'✍️ 正式道歉回复', action:(g)=>{ g.reputation=Math.min(5,g.reputation+0.2); addLog('诚恳态度赢得更多好评！声望微升','good'); } },
+      { text:'🙄 忽视不处理', action:(g)=>{ g.satisfaction=Math.max(0,g.satisfaction-15); addLog('差评扩散……满意度-15','bad'); } },
+    ]
+  },
+];
 
-  const total = (base + staffBonus + posBonus) * machMult * fridgeMult * roasterMult * waiterMult * managerMult * chefMult * decorMult * G.multiplier;
-  return Math.max(0, total);
+// ============================================================
+// MARKET EVENTS
+// ============================================================
+const MARKET_SITUATIONS = [
+  { emoji:'📈', name:'咖啡热潮', desc:'全城咖啡消费热情高涨，收益+20%', effect:(g)=>{ G.popularityBoost=0.2; }, duration: 60 },
+  { emoji:'📉', name:'经济下行', desc:'消费降级，顾客减少', effect:(g)=>{ G.popularityBoost=-0.15; }, duration: 50 },
+  { emoji:'🌡️', name:'高温季节', desc:'冷饮大热，冷萃收益×2', effect:(g)=>{ notify('🧊 冷饮热销！','good'); }, duration: 45 },
+  { emoji:'❄️', name:'寒流来袭', desc:'热饮需求暴增', effect:(g)=>{ notify('☕ 热饮供不应求！','good'); g.gold+=80; }, duration: 40 },
+  { emoji:'🎓', name:'开学季', desc:'学生客流增加', effect:(g)=>{ G.popularityBoost=0.1; }, duration: 55 },
+];
+
+// ============================================================
+// HELPERS
+// ============================================================
+function notify(msg, type='info'){
+  const c = document.getElementById('notifContainer');
+  const d = document.createElement('div');
+  d.className = `notif ${type}`;
+  d.textContent = msg;
+  c.appendChild(d);
+  setTimeout(()=>d.remove(), 3500);
 }
 
-function addCoins(amt){
-  G.coins += amt;
-  G.totalCoins += amt;
-  G.dailyEarned += amt;
-  G.customers += Math.floor(amt * 0.1);
+function addLog(msg, type='info'){
+  const list = document.getElementById('eventList');
+  const item = document.createElement('div');
+  item.className = `event-item ${type}`;
+  item.innerHTML = `<div class="event-time">第${G.day}天</div><div>${msg}</div>`;
+  list.insertBefore(item, list.firstChild);
+  if(list.children.length > 30) list.lastChild.remove();
 }
 
-let lastTick = Date.now();
-function tick(){
-  const now = Date.now();
-  const dt = (now - lastTick) / 1000;
-  lastTick = now;
-  G.time += dt;
-  G.eventCooldown = Math.max(0, G.eventCooldown - dt);
+function clearLog(){ document.getElementById('eventList').innerHTML=''; }
 
-  G.perSec = calcPerSec();
-  const earned = G.perSec * dt;
-  if(earned > 0) addCoins(earned);
-
-  // Stars from customers
-  G.stars = Math.floor(G.totalCoins / 1000);
-
-  // Unlock checks
-  unlockCheck();
-
-  // Daily goal
-  if(G.dailyEarned >= G.dailyGoal){
-    G.dayCount++;
-    G.dailyGoal = Math.floor(G.dailyGoal * 1.8);
-    G.dailyEarned = 0;
-    G.stars += 10;
-    addLog(`🎉 第${G.dayCount-1}天目标完成！获得声望+10，新目标: ¥${fmt(G.dailyGoal)}`,'gold');
-  }
-
-  // Random events
-  if(G.time > 30 && G.eventCooldown <= 0 && Math.random() < 0.004){
-    triggerEvent();
-    G.eventCooldown = 60;
-  }
-
-  // Update UI every tick
-  updateUI();
+function floatGold(text, el){
+  const r = el.getBoundingClientRect();
+  const d = document.createElement('div');
+  d.className = 'floating-gold';
+  d.textContent = text;
+  d.style.left = (r.left + Math.random()*r.width) + 'px';
+  d.style.top = (r.top + Math.random()*30) + 'px';
+  document.body.appendChild(d);
+  setTimeout(()=>d.remove(), 1000);
 }
 
-function unlockCheck(){
-  if(G.totalCoins > 50) EQUIPMENT.find(e=>e.id==='grinder').unlocked = true;
-  if(G.totalCoins > 80) EQUIPMENT.find(e=>e.id==='pos').unlocked = true;
-  if(G.totalCoins > 200) EQUIPMENT.find(e=>e.id==='fridge').unlocked = true;
-  if(G.totalCoins > 500) EQUIPMENT.find(e=>e.id==='roaster').unlocked = true;
-  if(G.totalCoins > 60) STAFF.find(s=>s.id==='waiter').unlocked = true;
-  if(G.totalCoins > 300) STAFF.find(s=>s.id==='manager').unlocked = true;
-  if(G.totalCoins > 800) STAFF.find(s=>s.id==='influencer').unlocked = true;
-  if(G.totalCoins > 2000) STAFF.find(s=>s.id==='chef').unlocked = true;
-  if(G.totalCoins > 100) DECOR.find(d=>d.id==='lighting').unlocked = true;
-  if(G.totalCoins > 250) DECOR.find(d=>d.id==='music').unlocked = true;
-  if(G.totalCoins > 600) DECOR.find(d=>d.id==='outdoor').unlocked = true;
-  if(G.totalCoins > 2000) DECOR.find(d=>d.id==='neon').unlocked = true;
+function switchTab(group, name){
+  const tabContainer = document.getElementById(group+'Tabs');
+  const tabs = tabContainer.querySelectorAll('.tab');
+  tabs.forEach((t,i)=>t.classList.toggle('active', t.textContent.includes(UPGRADES[0]) || false));
+  // simpler approach:
+  tabContainer.querySelectorAll('.tab').forEach(t=>{
+    const matches = t.getAttribute('onclick') && t.getAttribute('onclick').includes(`'${name}'`);
+    t.classList.toggle('active', matches);
+  });
+  document.querySelectorAll(`#${group}-${name}`).forEach(el=>el.classList.add('active'));
+  document.querySelectorAll(`[id^="${group}-"]:not(#${group}-${name})`).forEach(el=>el.classList.remove('active'));
 }
 
-// ── Buy Logic ────────────────────────────────────────────
-function buyMenu(idx){
-  const m = MENU[idx];
-  if(!m.unlocked) return;
-  if(m.level >= m.maxLevel){ showNotif('已达最高等级！'); return; }
-  const cost = m.costPerLevel(m.level);
-  if(G.coins < cost){ showNotif('金币不足！'); return; }
-  G.coins -= cost;
-  m.level++;
-  if(m.level === 1) { m.unlocked = true; G.menuCount++; addLog(`🍵 新品上架：${m.name}！`,'event'); }
-  else addLog(`⬆️ ${m.name} 升级至 Lv${m.level}`,'good');
-  G.upgradeCount++;
-  renderAll();
-}
-function buyEquip(idx){
-  const e = EQUIPMENT[idx];
-  if(!e.unlocked) return;
-  if(e.level >= e.maxLevel){ showNotif('已达最高等级！'); return; }
-  const cost = e.costPerLevel(e.level);
-  if(G.coins < cost){ showNotif('金币不足！'); return; }
-  G.coins -= cost;
-  e.level++;
-  addLog(`🔧 ${e.name} 升级至 Lv${e.level} — ${e.effect(e.level)}`,'good');
-  G.upgradeCount++;
-  renderAll();
-}
-function buyStaff(idx){
-  const s = STAFF[idx];
-  if(!s.unlocked) return;
-  if(s.level >= s.maxLevel){ showNotif('已达最高等级！'); return; }
-  const cost = s.costPerLevel(s.level);
-  if(G.coins < cost){ showNotif('金币不足！'); return; }
-  G.coins -= cost;
-  s.level++;
-  if(s.level===1){ G.staffCount++; addLog(`👤 雇佣了 ${s.name}！`,'event'); }
-  else addLog(`⬆️ ${s.name} 升级至 Lv${s.level}`,'good');
-  G.upgradeCount++;
-  renderAll();
-}
-function buyDecor(idx){
-  const d = DECOR[idx];
-  if(!d.unlocked) return;
-  if(d.level >= d.maxLevel){ showNotif('已达最高等级！'); return; }
-  const cost = d.costPerLevel(d.level);
-  if(G.coins < cost){ showNotif('金币不足！'); return; }
-  G.coins -= cost;
-  d.level++;
-  addLog(`✨ ${d.name} 升级至 Lv${d.level}`,'good');
-  G.upgradeCount++;
-  renderAll();
+// ============================================================
+// INIT UPGRADES
+// ============================================================
+function initUpgrades(){
+  UPGRADES.forEach(u=>{ G.upgrades[u.id]=0; });
+  renderUpgrades();
 }
 
-// ── Events ───────────────────────────────────────────────
-let activeEvent = null;
-function triggerEvent(){
-  activeEvent = EVENTS[Math.floor(Math.random()*EVENTS.length)];
-  renderEvent();
+function getUpgradeCost(u){
+  return Math.floor(u.baseCost * Math.pow(u.costMult, G.upgrades[u.id]||0));
 }
-function resolveEvent(choiceIdx){
-  if(!activeEvent) return;
-  activeEvent.choices[choiceIdx].fn();
-  activeEvent = null;
-  document.getElementById('eventBox').style.display='none';
+
+function renderUpgrades(){
+  const grid = document.getElementById('upgradeGrid');
+  grid.innerHTML = UPGRADES.map(u=>{
+    const lv = G.upgrades[u.id]||0;
+    const cost = getUpgradeCost(u);
+    const maxed = lv>=u.maxLevel;
+    const canAfford = G.gold>=cost;
+    return `<div class="upgrade-btn ${maxed?'maxed':(!canAfford?'locked':'')}" onclick="buyUpgrade('${u.id}')">
+      <div class="upgrade-icon">${u.icon}</div>
+      <div class="upgrade-name">${u.name}</div>
+      <div class="upgrade-level">Lv${lv}/${u.maxLevel}</div>
+      <div class="upgrade-desc">${u.desc}</div>
+      <div class="upgrade-cost">${maxed?'✅ 满级':(canAfford?`💰 ${cost}`:`🔒 ${cost}`)}</div>
+    </div>`;
+  }).join('');
 }
-function renderEvent(){
-  if(!activeEvent) return;
-  const box = document.getElementById('eventBox');
-  box.style.display='flex';
-  box.innerHTML=`
-    <div class="event-icon">${activeEvent.icon}</div>
-    <div class="event-content">
-      <div class="event-title">${activeEvent.title}</div>
-      <div class="event-desc">${activeEvent.desc}</div>
-      <div class="event-btns">
-        ${activeEvent.choices.map((c,i)=>`<button class="ev-btn ${c.good?'good':''}" onclick="resolveEvent(${i})">${c.label}</button>`).join('')}
+
+function buyUpgrade(id){
+  const u = UPGRADES.find(x=>x.id===id);
+  if(!u) return;
+  const lv = G.upgrades[id]||0;
+  if(lv>=u.maxLevel){ notify('已达最高等级！','info'); return; }
+  const cost = getUpgradeCost(u);
+  if(G.gold<cost){ notify('💰 金币不足！','bad'); return; }
+  G.gold-=cost;
+  G.upgrades[id]=(lv+1);
+  if(u.id==='deco'){ G.satisfaction=Math.min(110,G.satisfaction+5); }
+  if(u.id==='signage'){ G.reputation=Math.min(5,G.reputation+0.5); }
+  addLog(`🔨 升级【${u.name}】到Lv${G.upgrades[id]}！`, 'good');
+  notify(`${u.icon} ${u.name} 升级成功！`, 'good');
+  recalcRate();
+  renderUpgrades();
+  checkAchievements();
+}
+
+// ============================================================
+// RATE CALCULATION
+// ============================================================
+function recalcRate(){
+  let rate = 0.3; // base
+  // upgrades
+  UPGRADES.forEach(u=>{
+    const lv = G.upgrades[u.id]||0;
+    rate += lv * (u.ratePerLevel||0);
+  });
+  // staff
+  G.staff.forEach(s=>{
+    const def = ALL_STAFF.find(a=>a.id===s.id);
+    if(!def) return;
+    let sr = def.baseRate * (s.morale/100);
+    if(def.modifier) sr = def.modifier(sr);
+    // weather bobo
+    if(s.id==='boBo'){
+      if(G.weather==='rainy'||G.weather==='cloudy') sr*=2;
+      else if(G.weather==='sunny') sr*=0.8;
+    }
+    rate += sr;
+  });
+  // research
+  if(G.research['ai']) rate *= 1.25;
+  if(G.research['latte']) rate *= 1.15;
+  if(G.research['noodle']) rate *= 1.1;
+  // popularity
+  rate *= (1 + G.popularityBoost);
+  // cleanliness
+  rate *= (0.7 + G.cleanliness/100*0.3);
+  // stock
+  if(G.stock<20) rate *= 0.4;
+  else if(G.stock<50) rate *= 0.8;
+  // reputation
+  rate *= (0.8 + G.reputation*0.1);
+  // weather
+  if(G.weather==='rainy' && !G.research['app']) rate *= 0.75;
+  G.goldRate = Math.max(0, rate);
+}
+
+// ============================================================
+// RENDER MENU
+// ============================================================
+function renderMenu(){
+  const list = document.getElementById('menuList');
+  list.innerHTML = MENU_ITEMS.map(item=>{
+    const pop = item.popularity + Math.floor(Math.random()*5-2);
+    const price = G.menuPrices[item.id] || item.basePrice;
+    return `<div class="menu-item">
+      <div class="menu-emoji">${item.emoji}</div>
+      <div class="menu-info">
+        <div class="menu-name">${item.name}</div>
+        <div class="menu-desc">${item.desc}</div>
+        <div class="menu-price">💰 ${price}元/杯</div>
+        <div class="menu-popularity">受欢迎度 ${pop}%
+          <div class="menu-pop-bar"><div class="menu-pop-fill" style="width:${pop}%"></div></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <button class="btn btn-sm" onclick="adjustPrice('${item.id}',2)">▲+2</button>
+        <button class="btn-outline btn-sm" onclick="adjustPrice('${item.id}',-2)" style="padding:4px 8px;font-size:10px;">▼-2</button>
       </div>
     </div>`;
+  }).join('');
 }
 
-// ── Render ───────────────────────────────────────────────
-const fmt = n => {
-  if(n>=1e9) return (n/1e9).toFixed(1)+'B';
-  if(n>=1e6) return (n/1e6).toFixed(1)+'M';
-  if(n>=1e3) return (n/1e3).toFixed(1)+'K';
-  return Math.floor(n).toString();
-};
-
-function updateUI(){
-  document.getElementById('resCoins').textContent = '¥'+fmt(G.coins);
-  document.getElementById('resPerSec').textContent = fmt(G.perSec)+'/s';
-  document.getElementById('resStars').textContent = fmt(G.stars);
-  document.getElementById('resCustomers').textContent = fmt(G.customers);
-  document.getElementById('statTotal').textContent = '¥'+fmt(G.totalCoins);
-  document.getElementById('statUpgrades').textContent = G.upgradeCount;
-  document.getElementById('statStaff').textContent = G.staffCount;
-  document.getElementById('statMenuItems').textContent = G.menuCount;
-  const rep = Math.min(5, Math.floor(G.reputation + G.stars/200));
-  document.getElementById('cafeReputation').textContent = '口碑: '+'★'.repeat(rep)+'☆'.repeat(5-rep);
-  const prog = Math.min(100, G.dailyEarned/G.dailyGoal*100);
-  document.getElementById('dailyProg').style.width = prog+'%';
-  document.getElementById('dailyGoalText').textContent = `第${G.dayCount}天目标: ¥${fmt(G.dailyEarned)} / ¥${fmt(G.dailyGoal)}`;
+function adjustPrice(id, delta){
+  const item = MENU_ITEMS.find(m=>m.id===id);
+  if(!item) return;
+  G.menuPrices[id] = Math.max(5, (G.menuPrices[id]||item.basePrice)+delta);
+  const priceFactor = (G.menuPrices[id]-item.basePrice) / item.basePrice;
+  if(priceFactor>0.3) notify('⚠️ 价格偏高，可能影响客流！','bad');
+  else if(priceFactor<-0.2) notify('💡 低价策略，吸引更多顾客！','good');
+  renderMenu();
+  recalcRate();
 }
 
-let renderThrottle = 0;
-function renderAll(){
-  const now = Date.now();
-  if(now - renderThrottle < 300) return;
-  renderThrottle = now;
-  renderScene();
-  renderMenuGrid();
-  renderEquipGrid();
-  renderStaffGrid();
-  renderDecorGrid();
+// ============================================================
+// RENDER HIRE POOL
+// ============================================================
+function generateHirePool(){
+  const available = ALL_STAFF.filter(s=>!G.staff.some(h=>h.id===s.id));
+  G.hirePool = [];
+  for(let i=0;i<4;i++){
+    if(available.length===0) break;
+    const idx = Math.floor(Math.random()*available.length);
+    G.hirePool.push(available.splice(idx,1)[0]);
+  }
 }
 
-function renderScene(){
-  const vis = document.getElementById('cafeVisual');
-  const stations = [];
-  MENU.forEach(m=>{ if(m.level>0) stations.push({icon:m.icon, name:m.name, rate:'+'+fmt(m.base*m.level)+'/s'}); });
-  STAFF.forEach(s=>{ if(s.level>0) stations.push({icon:s.icon, name:s.name, rate:'Lv'+s.level}); });
-  EQUIPMENT.forEach(e=>{ if(e.level>0) stations.push({icon:e.icon, name:e.name, rate:'Lv'+e.level}); });
-  if(stations.length===0) stations.push({icon:'🪑',name:'空荡的店面',rate:'快去升级！'});
-  vis.innerHTML = stations.map(s=>`
-    <div class="station">
-      <span class="station-icon">${s.icon}</span>
-      <div class="station-name">${s.name}</div>
-      <div class="station-rate">${s.rate}</div>
+function renderHireList(){
+  const list = document.getElementById('hireList');
+  if(G.hirePool.length===0){ list.innerHTML='<div class="info-tip">当前没有候选员工，点击刷新！</div>'; return; }
+  list.innerHTML = G.hirePool.map(s=>{
+    const hired = G.staff.some(h=>h.id===s.id);
+    return `<div class="hire-card ${hired?'hired':''}" onclick="hireStaff('${s.id}')">
+      <div class="hire-emoji">${s.emoji}</div>
+      <div class="hire-info">
+        <div class="hire-name">${s.name} <span class="hire-rarity rare-${s.rarity}">${s.rarity}</span></div>
+        <div class="hire-skill-tag">${s.skill}</div>
+        <div class="hire-skill-desc">${s.skillDesc}</div>
+        <div class="hire-cost">${hired?'✅ 已在职':'💰 '+s.hireCost+'金币'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function refreshHirePool(){
+  if(G.gold<20){ notify('💰 需要20金币刷新！','bad'); return; }
+  G.gold-=20;
+  generateHirePool();
+  renderHireList();
+  notify('🔄 招募名单已更新！','info');
+}
+
+function hireStaff(id){
+  if(G.staff.some(s=>s.id===id)){ notify('该员工已在职！','info'); return; }
+  const def = ALL_STAFF.find(s=>s.id===id);
+  if(!def) return;
+  if(G.gold<def.hireCost){ notify(`💰 金币不足！需要${def.hireCost}💰`,'bad'); return; }
+  G.gold-=def.hireCost;
+  G.staff.push({ id:def.id, name:def.name, emoji:def.emoji, morale:80, workTime:0 });
+  addLog(`🎉 招募到【${def.name}】！技能：${def.skill}`,'good');
+  notify(`${def.emoji} ${def.name} 加入面厅！`,'special');
+  recalcRate();
+  renderStaffFloor();
+  renderHireList();
+  checkAchievements();
+}
+
+function dismissStaff(id){
+  G.staff = G.staff.filter(s=>s.id!==id);
+  recalcRate();
+  renderStaffFloor();
+  renderHireList();
+  notify('员工已离职','info');
+}
+
+// ============================================================
+// RENDER STAFF FLOOR
+// ============================================================
+function renderStaffFloor(){
+  const floor = document.getElementById('staffFloor');
+  if(G.staff.length===0){
+    floor.innerHTML='<div style="color:var(--text2);font-size:12px;padding:20px;text-align:center;width:100%;">还没有招募员工，去右侧招募面板雇用员工吧！</div>';
+    return;
+  }
+  floor.innerHTML = G.staff.map(s=>{
+    const def = ALL_STAFF.find(a=>a.id===s.id);
+    const status = s.morale>60?'working':(s.morale>30?'':'resting');
+    return `<div class="staff-card ${status}">
+      <span class="staff-dismiss" onclick="dismissStaff('${s.id}')">✖</span>
+      <div class="staff-emoji">${s.emoji}</div>
+      <div class="staff-name">${s.name}</div>
+      <div class="staff-title">${def?.title||''}</div>
+      <div class="staff-skill">${def?.skill||''}</div>
+      <div class="staff-bar-wrap"><div class="staff-bar" style="width:${s.morale}%;background:${s.morale>60?'var(--green)':s.morale>30?'var(--gold)':'var(--red)'}"></div></div>
+      <div class="staff-morale">士气 ${s.morale}%</div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// RESEARCH
+// ============================================================
+function initResearch(){
+  const list = document.getElementById('researchList');
+  list.innerHTML = RESEARCH.map(r=>`
+    <div class="research-item ${G.research[r.id]?'done':''}" id="res-${r.id}">
+      <div class="research-icon">${r.icon}</div>
+      <div class="research-info">
+        <div class="research-name">${r.name}</div>
+        <div class="research-desc">${r.desc}</div>
+        <div class="research-cost">${G.research[r.id]?'✅ 已研发':'💰 '+r.cost}</div>
+      </div>
+      ${!G.research[r.id]?`<button class="btn btn-sm" onclick="doResearch('${r.id}')">研发</button>`:''}
     </div>`).join('');
 }
 
-function cardHTML(icon, name, desc, effect, cost, level, maxLevel, affordable, unlocked){
-  if(!unlocked) return `<div class="item-card locked"><span class="card-icon">🔒</span><div class="card-name">${name}</div><div class="card-desc">需要更多资金解锁</div></div>`;
-  const isMax = level >= maxLevel;
-  return `<div class="item-card ${isMax?'maxed':''} ${!affordable&&!isMax?'cant-afford':''}">
-    ${level>0?`<div class="card-level ${isMax?'max':''}">Lv${level}${isMax?' MAX':''}</div>`:''}
-    <span class="card-icon">${icon}</span>
-    <div class="card-name">${name}</div>
-    <div class="card-desc">${desc}</div>
-    <div class="card-effect">${effect}</div>
-    ${isMax?`<span class="card-cost">✅ 满级</span>`:`<span class="card-cost ${!affordable?'cant-afford':''}">💰 ¥${fmt(cost)}</span>`}
-  </div>`;
+function doResearch(id){
+  const r = RESEARCH.find(x=>x.id===id);
+  if(!r||G.research[id]) return;
+  if(G.gold<r.cost){ notify('💰 金币不足！','bad'); return; }
+  G.gold-=r.cost;
+  G.research[id]=true;
+  addLog(`🔬 研发完成：【${r.name}】${r.desc}`,'special');
+  notify(`🔬 ${r.name} 研发成功！`,'special');
+  recalcRate();
+  initResearch();
 }
 
-function renderMenuGrid(){
-  document.getElementById('menuGrid').innerHTML = MENU.map((m,i)=>{
-    const cost = m.costPerLevel(m.level);
-    const eff = m.level>0 ? `+¥${(m.base*m.level).toFixed(1)}/s` : `解锁后 +¥${m.base}/s`;
-    const html = cardHTML(m.icon, m.name, m.desc, eff, cost, m.level, m.maxLevel, G.coins>=cost, m.unlocked||m.level>0);
-    return `<div onclick="buyMenu(${i})">${html}</div>`;
-  }).join('');
-}
-function renderEquipGrid(){
-  document.getElementById('equipGrid').innerHTML = EQUIPMENT.map((e,i)=>{
-    const cost = e.costPerLevel(e.level);
-    const eff = e.level>0 ? e.effect(e.level) : e.effect(1)+' (升级后)';
-    const html = cardHTML(e.icon, e.name, e.desc, eff, cost, e.level, e.maxLevel, G.coins>=cost, e.unlocked!==false);
-    return `<div onclick="buyEquip(${i})">${html}</div>`;
-  }).join('');
-}
-function renderStaffGrid(){
-  document.getElementById('staffGrid').innerHTML = STAFF.map((s,i)=>{
-    const cost = s.costPerLevel(s.level);
-    const eff = s.perSec ? `自动收入 +¥${s.perSec(Math.max(1,s.level+1))}/s` : `全局收入 ×${s.mult?(s.mult(Math.min(s.maxLevel,s.level+1)).toFixed(2)):'1.0'}`;
-    const html = cardHTML(s.icon, s.name, s.desc, eff, cost, s.level, s.maxLevel, G.coins>=cost, s.unlocked!==false);
-    return `<div onclick="buyStaff(${i})">${html}</div>`;
-  }).join('');
-}
-function renderDecorGrid(){
-  document.getElementById('decorGrid').innerHTML = DECOR.map((d,i)=>{
-    const cost = d.costPerLevel(d.level);
-    const eff = `收入乘数 ×${d.mult(Math.min(d.maxLevel,d.level+1)).toFixed(2)}`;
-    const html = cardHTML(d.icon, d.name, d.desc, eff, cost, d.level, d.maxLevel, G.coins>=cost, d.unlocked!==false);
-    return `<div onclick="buyDecor(${i})">${html}</div>`;
-  }).join('');
+// ============================================================
+// ACHIEVEMENTS
+// ============================================================
+function renderAchievements(){
+  const grid = document.getElementById('achieveGrid');
+  grid.innerHTML = ACHIEVEMENTS.map(a=>`
+    <div class="achieve-item ${G.achievements[a.id]?'unlocked':''}">
+      <div class="achieve-icon">${a.icon}</div>
+      <div class="achieve-name">${a.name}</div>
+    </div>`).join('');
 }
 
-// ── Log ──────────────────────────────────────────────────
-const logs = [];
-function addLog(msg, cls=''){
-  logs.unshift({msg,cls});
-  if(logs.length>30) logs.pop();
-  const la = document.getElementById('logArea');
-  la.innerHTML = logs.map(l=>`<div class="log-entry ${l.cls}">· ${l.msg}</div>`).join('');
+function checkAchievements(){
+  ACHIEVEMENTS.forEach(a=>{
+    if(!G.achievements[a.id] && a.condition(G)){
+      G.achievements[a.id]=true;
+      notify(`🏆 成就解锁：${a.name}！`,'special');
+      addLog(`🏆 成就解锁：【${a.name}】！`,'special');
+    }
+  });
+  renderAchievements();
 }
 
-// ── Notif ─────────────────────────────────────────────────
-let notifTimer;
-function showNotif(msg){
-  let n = document.querySelector('.notif');
-  if(n) n.remove();
-  n = document.createElement('div');
-  n.className='notif';
-  n.textContent=msg;
-  document.body.appendChild(n);
-  clearTimeout(notifTimer);
-  notifTimer = setTimeout(()=>n.remove(), 2500);
+// ============================================================
+// MARKET PANEL
+// ============================================================
+function renderMarket(){
+  const panel = document.getElementById('marketPanel');
+  const current = G.marketEvents.slice(-3).reverse();
+  panel.innerHTML = `
+    <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">当前市场环境影响收益：${G.popularityBoost>=0?'+':''}${Math.round(G.popularityBoost*100)}%</div>
+    ${current.length?current.map(e=>`<div class="menu-item" style="margin-bottom:6px;">
+      <div class="menu-emoji">${e.emoji}</div>
+      <div class="menu-info"><div class="menu-name">${e.name}</div><div class="menu-desc">${e.desc}</div></div>
+    </div>`).join(''):'<div class="info-tip">暂无市场动态</div>'}
+    <div class="section-divider"></div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:6px;">市场预测（随机）</div>
+    <div style="font-size:11px;color:var(--green);">📊 未来趋势：${['消费升级，咖啡热潮持续','周末效应，客流预期+30%','节假日临近，礼品需求上涨'][Math.floor(Math.random()*3)]}</div>
+  `;
 }
 
-// ── Tabs ─────────────────────────────────────────────────
-function switchTab(id){
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['menu','equipment','staff','decor'][i]===id));
-  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
+// ============================================================
+// POPUP SYSTEM
+// ============================================================
+let currentPopupActions = [];
+
+function showPopup(event){
+  const hasFuzai = G.staff.some(s=>s.id==='fuzai');
+  document.getElementById('popupIcon').textContent = event.icon;
+  document.getElementById('popupTitle').textContent = event.title;
+  document.getElementById('popupDesc').textContent = hasFuzai && Math.random()<0.3
+    ? '🍀 福仔的福气起效！好事正在发生……'
+    : event.desc;
+  const choices = document.getElementById('popupChoices');
+  choices.innerHTML = event.choices.map((c,i)=>`
+    <button class="popup-btn" onclick="choosePopup(${i})">${c.text}</button>`).join('');
+  currentPopupActions = event.choices.map(c=>c.action);
+  if(hasFuzai && Math.random()<0.3){
+    currentPopupActions = [()=>{ G.gold+=200; G.dayIncome+=200; addLog('🍀 福仔护体！获得200💰！','special'); }];
+    choices.innerHTML = `<button class="popup-btn good" onclick="choosePopup(0)">🍀 福气降临，好事发生！</button>`;
+  }
+  document.getElementById('popupOverlay').classList.add('show');
+  document.getElementById('eventPopup').classList.add('show');
 }
 
-// ── Boot ─────────────────────────────────────────────────
-addLog('☕ 欢迎来到小巷咖啡馆！点击卡片升级经营吧～','event');
-addLog('💡 提示：先升级意式浓缩和咖啡机，快速启动收入！');
-G.dailyGoal = 500;
-renderAll();
-setInterval(()=>{
-  tick();
-  // slow render
-  if(Math.random()<0.1) renderAll();
-}, 100);
+function choosePopup(idx){
+  if(currentPopupActions[idx]) currentPopupActions[idx](G);
+  closePopup();
+  recalcRate();
+  renderUpgrades();
+  updateUI();
+}
+
+function closePopup(){
+  document.getElementById('popupOverlay').classList.remove('show');
+  document.getElementById('eventPopup').classList.remove('show');
+}
+
+// ============================================================
+// CRISIS SYSTEM
+// ============================================================
+function addCrisis(msg, cost){
+  const area = document.getElementById('crisisArea');
+  const id = 'crisis_'+Date.now();
+  const div = document.createElement('div');
+  div.className = 'crisis-bar';
+  div.id = id;
+  div.innerHTML = `🚨 ${msg} <button class="btn btn-sm" onclick="resolveCrisis('${id}',${cost})" style="margin-left:10px;">花费${cost}💰解决</button>
+    <button class="btn-outline btn-sm" onclick="ignoreCrisis('${id}')" style="margin-left:6px;">忍着</button>`;
+  area.appendChild(div);
+}
+
+function resolveCrisis(id, cost){
+  if(G.gold<cost){ notify('💰 金币不足！','bad'); return; }
+  G.gold-=cost;
+  document.getElementById(id)?.remove();
+  notify('✅ 危机已解决！','good');
+  recalcRate();
+}
+
+function ignoreCrisis(id){
+  G.goldRate *= 0.7;
+  document.getElementById(id)?.remove();
+  addLog('⚠️ 忽视危机，收益下降30%！','bad');
+  setTimeout(()=>G.goldRate/=0.7, 60000);
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+function restock(){
+  if(G.gold<50){ notify('💰 需要50金币！','bad'); return; }
+  G.gold-=50;
+  G.stock=Math.min(100,G.stock+40);
+  addLog('🛒 补货完成！库存+40%','info');
+  notify('📦 补货成功！','good');
+  recalcRate();
+}
+
+function cleanShop(){
+  if(G.gold<30){ notify('💰 需要30金币！','bad'); return; }
+  G.gold-=30;
+  G.cleanliness=Math.min(100,G.cleanliness+30);
+  addLog('🧹 打扫完成！清洁度+30%','info');
+  notify('✨ 焕然一新！','good');
+  recalcRate();
+}
+
+function staffParty(){
+  if(G.gold<100){ notify('💰 需要100金币！','bad'); return; }
+  G.gold-=100;
+  G.morale=Math.min(100,G.morale+30);
+  G.staff.forEach(s=>s.morale=Math.min(100,s.morale+20));
+  addLog('🎉 员工聚会！全员士气+20%','good');
+  notify('🎉 快乐满满！','special');
+  renderStaffFloor();
+  recalcRate();
+}
+
+function doMarketing(){
+  if(G.gold<80){ notify('💰 需要80金币！','bad'); return; }
+  G.gold-=80;
+  const hasShark = G.staff.some(s=>s.id==='shark');
+  const duration = hasShark ? 90000 : 60000;
+  const boost = hasShark ? 0.4 : 0.2;
+  G.goldRate *= (1+boost);
+  G.popularityBoost += 0.1;
+  setTimeout(()=>{ G.goldRate/=(1+boost); G.popularityBoost-=0.1; }, duration);
+  addLog(`📣 广告投放！收益+${Math.round(boost*100)}%，持续${duration/1000}秒${hasShark?' (鲨鱼加成)':''}`, 'good');
+  notify('📣 广告效果拉满！','good');
+}
+
+function doSpecialDeal(){
+  const items = ['珍珠奶茶','拿铁','招牌小面','抹茹蛋糕'];
+  const item = items[Math.floor(Math.random()*items.length)];
+  const earn = 50+Math.floor(Math.random()*100);
+  G.gold+=earn; G.dayIncome+=earn;
+  G.sales+=Math.floor(Math.random()*10)+5;
+  addLog(`🎁 限时特惠【${item}】！售出${Math.floor(Math.random()*20)+10}份，+${earn}💰`,'good');
+  notify(`🎁 特惠活动盈利 +${earn}💰！`,'good');
+  floatGold(`+${earn}💰`, document.getElementById('staffFloor'));
+  checkAchievements();
+}
+
+function triggerInspection(){
+  showPopup(RANDOM_EVENTS[0]);
+}
+
+function skipDay(){
+  if(!confirm('确定跳过今天剩余时间？将进行日结算。')) return;
+  daySettlement();
+}
+
+// ============================================================
+// DAY SETTLEMENT
+// ============================================================
+function daySettlement(){
+  G.day++;
+  const income = G.dayIncome;
+  G.totalEarned += income;
+
+  // Daily decay
+  G.cleanliness = Math.max(0, G.cleanliness - 10);
+  G.stock = Math.max(0, G.stock - 15);
+  G.morale = Math.max(0, G.morale - 5);
+  G.staff.forEach(s=> s.morale = Math.max(10, s.morale-8));
+
+  // Maggot special
+  if(G.staff.some(s=>s.id==='maggot')){
+    G.cleanliness = Math.min(100, G.cleanliness+20);
+    addLog('🪱 一只蛆的神秘力量重置了一些负面状态！','special');
+  }
+
+  // Random weather
+  const weathers = ['sunny','sunny','cloudy','rainy','stormy'];
+  G.weather = weathers[Math.floor(Math.random()*weathers.length)];
+  const seasons = ['spring','summer','autumn','winter'];
+  if(G.day%30===0) G.season = seasons[Math.floor(G.day/30)%4];
+
+  // Random market
+  if(Math.random()<0.4){
+    const mk = MARKET_SITUATIONS[Math.floor(Math.random()*MARKET_SITUATIONS.length)];
+    G.marketEvents.push(mk);
+    mk.effect(G);
+    addLog(`📈 市场变化：${mk.name} — ${mk.desc}`,'info');
+    setTimeout(()=>{ G.popularityBoost=0; }, mk.duration*1000);
+  }
+
+  addLog(`📅 第${G.day}天开始！昨日收入：${income}💰 | 天气：${getWeatherName()}`, 'info');
+  G.dayIncome = 0;
+  G.sales = 0;
+
+  recalcRate();
+  renderStaffFloor();
+  renderMarket();
+  checkAchievements();
+  updateUI();
+}
+
+// ============================================================
+// STATUS LABELS
+// ============================================================
+function getWeatherName(){
+  const names = {sunny:'☀️ 晴天', cloudy:'⛅ 阴天', rainy:'🌧️ 雨天', stormy:'⛈️ 暴雨'};
+  return names[G.weather]||'☀️ 晴天';
+}
+
+function getSeasonName(){
+  const s = {spring:'🌸 春季', summer:'☀️ 夏季', autumn:'🍂 秋季', winter:'❄️ 冬季'};
+  return s[G.season]||'🌸 春季';
+}
+
+function getRepStars(){
+  const r = Math.round(G.reputation);
+  return '⭐'.repeat(r)+'☆'.repeat(5-r);
+}
+
+function getCustLabel(){
+  if(G.satisfaction<30) return '冷清';
+  if(G.satisfaction<55) return '一般';
+  if(G.satisfaction<75) return '热闹';
+  return '🔥 爆满';
+}
+
+// ============================================================
+// UI UPDATE
+// ============================================================
+function updateUI(){
+  document.getElementById('goldDisplay').textContent = Math.floor(G.gold);
+  document.getElementById('rateDisplay').textContent = '+' + G.goldRate.toFixed(2)+'/秒';
+  document.getElementById('incomeDisplay').textContent = Math.floor(G.dayIncome);
+  document.getElementById('dayDisplay').textContent = `第${G.day}天`;
+
+  document.getElementById('satisfactionVal').textContent = Math.round(G.satisfaction)+'%';
+  document.getElementById('satisfactionBar').style.width = G.satisfaction+'%';
+  document.getElementById('cleanVal').textContent = Math.round(G.cleanliness)+'%';
+  document.getElementById('cleanBar').style.width = G.cleanliness+'%';
+  document.getElementById('stockVal').textContent = Math.round(G.stock)+'%';
+  document.getElementById('stockBar').style.width = G.stock+'%';
+  document.getElementById('moraleVal').textContent = Math.round(G.morale)+'%';
+  document.getElementById('moraleBar').style.width = G.morale+'%';
+
+  document.getElementById('weatherLabel').textContent = getWeatherName();
+  document.getElementById('seasonLabel').textContent = getSeasonName();
+  document.getElementById('repLabel').textContent = getRepStars();
+  document.getElementById('custLabel').textContent = getCustLabel();
+  document.getElementById('salesLabel').textContent = Math.floor(G.sales);
+  document.getElementById('nextEventLabel').textContent = Math.max(0, Math.ceil(G.nextEventIn-G.eventTimer));
+
+  renderUpgrades();
+}
+
+// ============================================================
+// GAME LOOP
+// ============================================================
+let lastTime = Date.now();
+function gameLoop(){
+  const now = Date.now();
+  const dt = (now-lastTime)/1000;
+  lastTime = now;
+
+  // Earn gold
+  const earned = G.goldRate * dt;
+  G.gold += earned;
+  G.dayIncome += earned;
+  G.totalEarned += earned;
+  G.sales += dt * 0.3;
+
+  // Satisfaction drift
+  G.satisfaction = Math.max(0, Math.min(100, G.satisfaction + (G.morale>60?0.01:-0.02)*dt));
+
+  // Staff passives
+  G.staff.forEach(s=>{
+    const def = ALL_STAFF.find(a=>a.id===s.id);
+    if(def?.passive) def.passive(G);
+    s.workTime = (s.workTime||0)+dt;
+    // Morale recovery if resting
+    if(s.morale<50) s.morale=Math.min(100,s.morale+dt*0.5);
+  });
+
+  // Event timer
+  G.eventTimer += dt;
+  if(G.eventTimer >= G.nextEventIn){
+    G.eventTimer = 0;
+    G.nextEventIn = 30 + Math.random()*60;
+    triggerRandomEvent();
+  }
+
+  // Day timer
+  G.dayTimer += dt;
+  if(G.dayTimer >= G.dayLength){
+    G.dayTimer = 0;
+    daySettlement();
+  }
+
+  // Stock warning
+  if(G.stock<15 && Math.random()<0.002){
+    notify('⚠️ 食材严重不足！快去补货！','bad');
+  }
+
+  updateUI();
+  checkAchievements();
+  requestAnimationFrame(gameLoop);
+}
+
+function triggerRandomEvent(){
+  const evt = RANDOM_EVENTS[Math.floor(Math.random()*RANDOM_EVENTS.length)];
+  addLog(`🎲 随机事件触发：${evt.title}`, 'special');
+  showPopup(evt);
+}
+
+// ============================================================
+// AVATAR UPLOAD
+// ============================================================
+document.getElementById('avatarWrap').addEventListener('click',()=>{
+  document.getElementById('avatarInput').click();
+});
+document.getElementById('avatarInput').addEventListener('change',function(){
+  const file = this.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e=>{ document.getElementById('avatarImg').src=e.target.result; };
+  reader.readAsDataURL(file);
+});
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){
+  initUpgrades();
+  initResearch();
+  renderAchievements();
+  renderMenu();
+  generateHirePool();
+  renderHireList();
+  renderMarket();
+  recalcRate();
+  updateUI();
+  addLog('🎊 小面的咖啡厅·面厅正式开业！祝生意兴隆！','good');
+  requestAnimationFrame(gameLoop);
+}
+
+init();
 </script>
 </body>
 </html>
