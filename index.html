@@ -8,21 +8,21 @@
   @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
 
   :root {
-    --bg: #1a0a00;
-    --bg2: #2a1500;
-    --card: #1f1008;
-    --card2: #2d1a0a;
-    --gold: #f5c842;
-    --gold2: #e8a020;
-    --red: #e84040;
-    --green: #4cd964;
-    --blue: #4ab8ff;
-    --purple: #b06aff;
-    --pink: #ff6aab;
-    --text: #f0e0c0;
-    --text2: #a08060;
-    --border: #5a3010;
-    --accent: #ff8c00;
+    --bg: #fdf0f5;
+    --bg2: #fce4ef;
+    --card: #ffffff;
+    --card2: #fff5f9;
+    --gold: #d4855a;
+    --gold2: #c96e3f;
+    --red: #e85d7a;
+    --green: #5cb87a;
+    --blue: #5a9fd4;
+    --purple: #a870d4;
+    --pink: #f47eb0;
+    --text: #5a3a4a;
+    --text2: #b090a0;
+    --border: #f0c0d4;
+    --accent: #f47eb0;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,8 +34,9 @@
     min-height: 100vh;
     overflow-x: hidden;
     background-image:
-      radial-gradient(ellipse at 20% 50%, rgba(255,120,0,0.04) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(200,80,0,0.03) 0%, transparent 50%);
+      radial-gradient(ellipse at 15% 40%, rgba(255,182,210,0.3) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 20%, rgba(196,180,255,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 90%, rgba(180,230,200,0.2) 0%, transparent 50%);
   }
 
   /* HEADER */
@@ -44,7 +45,7 @@
     align-items: center;
     gap: 14px;
     padding: 12px 18px;
-    background: linear-gradient(135deg, #2d1505 0%, #1a0a00 100%);
+    background: linear-gradient(135deg, #ffd6e8 0%, #ffe8f4 100%);
     border-bottom: 2px solid var(--border);
     position: sticky;
     top: 0;
@@ -58,7 +59,7 @@
     border: 2.5px solid var(--gold);
     overflow: hidden;
     flex-shrink: 0;
-    box-shadow: 0 0 12px rgba(245,200,66,0.4);
+    box-shadow: 0 0 12px rgba(244,126,176,0.5);
     cursor: pointer;
     position: relative;
   }
@@ -75,8 +76,8 @@
   .shop-title {
     font-family: 'ZCOOL KuaiLe', cursive;
     font-size: 20px;
-    color: var(--gold);
-    text-shadow: 0 0 16px rgba(245,200,66,0.5);
+    color: var(--accent);
+    text-shadow: 0 0 16px rgba(244,126,176,0.4);
     letter-spacing: 2px;
   }
   .shop-subtitle { font-size: 11px; color: var(--text2); margin-top: 2px; }
@@ -90,24 +91,25 @@
 
   .stat-box {
     text-align: center;
-    background: var(--card2);
+    background: rgba(255,255,255,0.8);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 6px 14px;
+    backdrop-filter: blur(4px);
   }
   .stat-label { font-size: 10px; color: var(--text2); }
-  .stat-value { font-size: 18px; font-weight: 700; color: var(--gold); }
+  .stat-value { font-size: 18px; font-weight: 700; color: var(--accent); }
   .stat-rate { font-size: 11px; color: var(--green); }
 
   .day-box {
     text-align: center;
-    background: var(--card2);
+    background: rgba(255,255,255,0.8);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 6px 14px;
   }
   .day-label { font-size: 10px; color: var(--text2); }
-  .day-value { font-size: 15px; font-weight: 700; color: var(--accent); }
+  .day-value { font-size: 15px; font-weight: 700; color: var(--purple); }
 
   /* MAIN LAYOUT */
   .main { display: grid; grid-template-columns: 280px 1fr 280px; gap: 14px; padding: 14px; max-width: 1400px; margin: 0 auto; }
@@ -120,12 +122,12 @@
     overflow: hidden;
   }
   .panel-header {
-    background: linear-gradient(90deg, var(--card2), var(--bg2));
+    background: linear-gradient(90deg, #ffd6e8, #fff0f8);
     padding: 10px 16px;
     border-bottom: 1px solid var(--border);
     font-family: 'ZCOOL KuaiLe', cursive;
     font-size: 15px;
-    color: var(--gold);
+    color: var(--accent);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -144,9 +146,9 @@
     transition: all .2s;
     color: var(--text);
   }
-  .upgrade-btn:hover:not(.locked) { border-color: var(--gold); background: #3a2010; transform: translateY(-1px); }
+  .upgrade-btn:hover:not(.locked) { border-color: var(--accent); background: #fff0f5; transform: translateY(-1px); }
   .upgrade-btn.locked { opacity: 0.45; cursor: not-allowed; }
-  .upgrade-btn.maxed { border-color: var(--green); background: #0a2010; }
+  .upgrade-btn.maxed { border-color: var(--green); background: #f0fff5; }
   .upgrade-icon { font-size: 22px; }
   .upgrade-name { font-size: 11px; font-weight: 600; margin: 4px 0 2px; }
   .upgrade-cost { font-size: 11px; color: var(--gold); }
@@ -168,8 +170,8 @@
   .cafe-floor::before {
     content: '';
     position: absolute; inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(90,48,16,0.15) 28px, rgba(90,48,16,0.15) 29px),
-                repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(90,48,16,0.15) 28px, rgba(90,48,16,0.15) 29px);
+    background: repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(240,192,212,0.2) 28px, rgba(240,192,212,0.2) 29px),
+                repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(240,192,212,0.2) 28px, rgba(240,192,212,0.2) 29px);
     pointer-events: none;
   }
 
@@ -279,7 +281,7 @@
     cursor: pointer;
     display: flex; gap: 10px; align-items: center;
   }
-  .hire-card:hover:not(.hired) { border-color: var(--gold); background: #3a2010; }
+  .hire-card:hover:not(.hired) { border-color: var(--accent); background: #fff5f8; }
   .hire-card.hired { border-color: var(--text2); opacity: 0.4; cursor: not-allowed; }
   .hire-emoji { font-size: 28px; }
   .hire-info { flex: 1; }
@@ -291,34 +293,34 @@
     font-size: 9px; padding: 1px 6px; border-radius: 4px;
     font-weight: 700; display: inline-block; margin-top: 2px;
   }
-  .rare-N { background: #333; color: #aaa; }
-  .rare-R { background: #0a2a5a; color: var(--blue); }
-  .rare-SR { background: #2a0a5a; color: var(--purple); }
-  .rare-SSR { background: #5a3a00; color: var(--gold); }
+  .rare-N { background: #f0e8ee; color: #a090a0; }
+  .rare-R { background: #e8f4ff; color: var(--blue); }
+  .rare-SR { background: #f4e8ff; color: var(--purple); }
+  .rare-SSR { background: #fff3e8; color: var(--gold); }
 
   /* RANDOM EVENT POPUP */
   .event-popup {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.8);
-    background: var(--card2);
-    border: 2px solid var(--gold);
+    background: #fff8fb;
+    border: 2px solid var(--accent);
     border-radius: 18px;
     padding: 28px;
     min-width: 340px;
     max-width: 420px;
     z-index: 1000;
     text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 30px rgba(245,200,66,0.15);
+    box-shadow: 0 20px 60px rgba(244,126,176,0.25), 0 0 40px rgba(244,126,176,0.1);
     opacity: 0;
     pointer-events: none;
     transition: all .3s cubic-bezier(.34,1.56,.64,1);
   }
   .event-popup.show { opacity: 1; transform: translate(-50%,-50%) scale(1); pointer-events: all; }
   .popup-icon { font-size: 52px; margin-bottom: 10px; }
-  .popup-title { font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; color: var(--gold); margin-bottom: 8px; }
+  .popup-title { font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; color: var(--accent); margin-bottom: 8px; }
   .popup-desc { font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 16px; }
   .popup-choices { display: flex; flex-direction: column; gap: 8px; }
   .popup-btn {
-    background: var(--card);
+    background: #fff0f6;
     border: 1.5px solid var(--border);
     border-radius: 10px;
     padding: 10px 16px;
@@ -328,12 +330,13 @@
     transition: all .2s;
     font-family: 'Noto Sans SC', sans-serif;
   }
-  .popup-btn:hover { border-color: var(--gold); background: #3a2010; }
+  .popup-btn:hover { border-color: var(--accent); background: #fff0f6; }
   .popup-btn.good { border-color: var(--green); }
   .popup-btn.bad { border-color: var(--red); }
   .popup-overlay {
     position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(180,100,130,0.25);
+    backdrop-filter: blur(3px);
     z-index: 999;
     opacity: 0; pointer-events: none; transition: opacity .3s;
   }
@@ -343,22 +346,23 @@
   .status-bar {
     display: flex; gap: 8px; flex-wrap: wrap;
     padding: 8px 14px;
-    background: var(--bg2);
+    background: #fce8f2;
     border-bottom: 1px solid var(--border);
     font-size: 11px;
   }
   .status-tag {
-    background: var(--card2);
+    background: rgba(255,255,255,0.8);
     border: 1px solid var(--border);
     border-radius: 6px;
     padding: 3px 10px;
     display: flex; align-items: center; gap: 5px;
+    color: var(--text);
   }
 
   /* BUTTONS */
   .btn {
-    background: linear-gradient(135deg, var(--gold2), var(--accent));
-    color: #1a0a00;
+    background: linear-gradient(135deg, #f47eb0, #e060a0);
+    color: #fff;
     border: none;
     border-radius: 8px;
     padding: 8px 16px;
@@ -367,12 +371,13 @@
     cursor: pointer;
     font-family: 'Noto Sans SC', sans-serif;
     transition: all .2s;
+    box-shadow: 0 2px 8px rgba(244,126,176,0.3);
   }
-  .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; filter: none; }
   .btn-sm { padding: 5px 10px; font-size: 11px; }
   .btn-outline {
-    background: transparent;
+    background: rgba(255,255,255,0.7);
     border: 1.5px solid var(--border);
     color: var(--text);
     border-radius: 8px; padding: 7px 14px;
@@ -380,7 +385,7 @@
     font-family: 'Noto Sans SC', sans-serif;
     transition: all .2s;
   }
-  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
   /* NOTIFICATION */
   .notif-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; z-index: 200; }
@@ -389,7 +394,7 @@
     border-radius: 10px; padding: 10px 14px;
     font-size: 12px; max-width: 260px;
     animation: notifIn .3s ease;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 16px rgba(244,126,176,0.15);
   }
   .notif.good { border-color: var(--green); color: var(--green); }
   .notif.bad { border-color: var(--red); color: var(--red); }
@@ -400,7 +405,7 @@
   /* PROGRESS BARS */
   .progress-row { margin-bottom: 8px; }
   .progress-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--text2); margin-bottom: 3px; }
-  .progress-track { background: #0a0a0a; border-radius: 4px; height: 7px; overflow: hidden; }
+  .progress-track { background: #f0e0ea; border-radius: 4px; height: 7px; overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 4px; transition: width .5s; }
 
   /* REPUTATION */
@@ -428,7 +433,7 @@
     font-family: 'Noto Sans SC', sans-serif;
     transition: all .2s;
   }
-  .tab.active { background: var(--card2); border-color: var(--border); color: var(--gold); }
+  .tab.active { background: #ffd6e8; border-color: var(--border); color: var(--accent); }
   .tab-content { display: none; }
   .tab-content.active { display: block; }
 
@@ -439,11 +444,11 @@
     border-radius: 8px; padding: 8px; text-align: center;
     transition: all .3s;
   }
-  .achieve-item.unlocked { border-color: var(--gold); background: #2a1a00; }
+  .achieve-item.unlocked { border-color: var(--accent); background: #fff0f6; }
   .achieve-item.unlocked .achieve-icon { filter: none; }
   .achieve-icon { font-size: 22px; filter: grayscale(1) opacity(0.4); }
   .achieve-name { font-size: 9px; color: var(--text2); margin-top: 3px; }
-  .achieve-item.unlocked .achieve-name { color: var(--gold); }
+  .achieve-item.unlocked .achieve-name { color: var(--accent); }
 
   /* SCROLL */
   ::-webkit-scrollbar { width: 4px; }
@@ -457,7 +462,7 @@
 
   .floating-gold {
     position: fixed; pointer-events: none; z-index: 500;
-    font-size: 14px; color: var(--gold); font-weight: 700;
+    font-size: 14px; color: var(--accent); font-weight: 700;
     animation: floatUp 1s ease forwards;
   }
   @keyframes floatUp {
@@ -469,7 +474,7 @@
   .fire-btn { font-size: 10px; cursor: pointer; color: var(--red); margin-left: 6px; }
 
   .crisis-bar {
-    background: var(--card2); border: 1.5px solid var(--red);
+    background: #fff0f2; border: 1.5px solid var(--red);
     border-radius: 10px; padding: 8px 14px; margin-bottom: 8px;
     font-size: 11px; color: var(--red);
     animation: crisisPulse 1s infinite;
@@ -609,8 +614,8 @@
     <div class="panel">
       <div class="panel-header">⚡ 即时操作</div>
       <div class="panel-body" style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn" onclick="doMarketing()">📣 打广告 (80💰)</button>
-        <button class="btn" onclick="doSpecialDeal()">🎁 限时特惠</button>
+        <button class="btn" id="marketingBtn" onclick="doMarketing()">📣 打广告 (80💰)</button>
+        <button class="btn" id="specialDealBtn" onclick="doSpecialDeal()">🎁 限时特惠</button>
         <button class="btn" onclick="triggerInspection()">🔍 模拟检查</button>
         <button class="btn btn-outline" onclick="skipDay()">⏭ 跳过一天</button>
       </div>
@@ -691,6 +696,8 @@ const G = {
   hirePool: [],
   crises: [],
   inspectionPassed: 0,
+  specialDealCooldown: 0,
+  marketingCooldown: 0,
 };
 
 // ============================================================
@@ -1374,6 +1381,10 @@ function staffParty(){
 }
 
 function doMarketing(){
+  if(G.marketingCooldown > 0){
+    notify(`⏳ 广告冷却中，还需 ${Math.ceil(G.marketingCooldown)} 秒`,'bad');
+    return;
+  }
   if(G.gold<80){ notify('💰 需要80金币！','bad'); return; }
   G.gold-=80;
   const hasShark = G.staff.some(s=>s.id==='shark');
@@ -1382,19 +1393,34 @@ function doMarketing(){
   G.goldRate *= (1+boost);
   G.popularityBoost += 0.1;
   setTimeout(()=>{ G.goldRate/=(1+boost); G.popularityBoost-=0.1; }, duration);
+  G.marketingCooldown = duration / 1000;
   addLog(`📣 广告投放！收益+${Math.round(boost*100)}%，持续${duration/1000}秒${hasShark?' (鲨鱼加成)':''}`, 'good');
   notify('📣 广告效果拉满！','good');
 }
 
 function doSpecialDeal(){
-  const items = ['珍珠奶茶','拿铁','招牌小面','抹茹蛋糕'];
+  if(G.specialDealCooldown > 0){
+    notify(`⏳ 特惠冷却中，还需 ${Math.ceil(G.specialDealCooldown)} 秒`,'bad');
+    return;
+  }
+  const stockCost = 20;
+  if(G.stock < stockCost){
+    notify('📦 库存不足！至少需要20%库存才能搞特惠','bad');
+    return;
+  }
+  const items = ['珍珠奶茶','拿铁','招牌小面','抹茶蛋糕'];
   const item = items[Math.floor(Math.random()*items.length)];
+  const soldCount = Math.floor(Math.random()*20)+10;
   const earn = 50+Math.floor(Math.random()*100);
-  G.gold+=earn; G.dayIncome+=earn;
-  G.sales+=Math.floor(Math.random()*10)+5;
-  addLog(`🎁 限时特惠【${item}】！售出${Math.floor(Math.random()*20)+10}份，+${earn}💰`,'good');
-  notify(`🎁 特惠活动盈利 +${earn}💰！`,'good');
+  G.gold += earn;
+  G.dayIncome += earn;
+  G.sales += soldCount;
+  G.stock = Math.max(0, G.stock - stockCost);
+  G.specialDealCooldown = 60; // 60秒冷却
+  addLog(`🎁 限时特惠【${item}】！售出${soldCount}份，消耗库存${stockCost}%，+${earn}💰`,'good');
+  notify(`🎁 特惠活动盈利 +${earn}💰！冷却60秒`,'good');
   floatGold(`+${earn}💰`, document.getElementById('staffFloor'));
+  recalcRate();
   checkAchievements();
 }
 
@@ -1503,6 +1529,31 @@ function updateUI(){
   document.getElementById('salesLabel').textContent = Math.floor(G.sales);
   document.getElementById('nextEventLabel').textContent = Math.max(0, Math.ceil(G.nextEventIn-G.eventTimer));
 
+  // Cooldown button states
+  const dealBtn = document.getElementById('specialDealBtn');
+  const mktBtn = document.getElementById('marketingBtn');
+  if(dealBtn){
+    if(G.specialDealCooldown > 0){
+      dealBtn.textContent = `⏳ 特惠冷却 ${Math.ceil(G.specialDealCooldown)}s`;
+      dealBtn.disabled = true;
+    } else if(G.stock < 20){
+      dealBtn.textContent = `📦 库存不足`;
+      dealBtn.disabled = true;
+    } else {
+      dealBtn.textContent = `🎁 限时特惠`;
+      dealBtn.disabled = false;
+    }
+  }
+  if(mktBtn){
+    if(G.marketingCooldown > 0){
+      mktBtn.textContent = `⏳ 广告冷却 ${Math.ceil(G.marketingCooldown)}s`;
+      mktBtn.disabled = true;
+    } else {
+      mktBtn.textContent = `📣 打广告 (80💰)`;
+      mktBtn.disabled = false;
+    }
+  }
+
   renderUpgrades();
 }
 
@@ -1514,6 +1565,10 @@ function gameLoop(){
   const now = Date.now();
   const dt = (now-lastTime)/1000;
   lastTime = now;
+
+  // Cooldowns
+  if(G.specialDealCooldown > 0) G.specialDealCooldown = Math.max(0, G.specialDealCooldown - dt);
+  if(G.marketingCooldown > 0) G.marketingCooldown = Math.max(0, G.marketingCooldown - dt);
 
   // Earn gold
   const earned = G.goldRate * dt;
