@@ -1,280 +1,345 @@
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 
 .w{
   font-family:'Nunito',sans-serif;
-  width:100%;
-  aspect-ratio:16/9;
-  max-height:360px;
-  background:#fef6ff;
-  border:4px solid #f0a8d8;
-  box-shadow:0 0 0 2px #c9b8f8, 6px 6px 0 #f0a8d8, 6px 6px 0 4px #c9b8f8;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:0;
-  padding:0;
-  position:relative;
-  overflow:hidden;
+  width:100%;aspect-ratio:16/9;max-height:360px;
+  background:radial-gradient(ellipse at 40% 35%, #2a1f3d 0%, #0f0a1a 70%);
+  border:3px solid #3a2a5a;
+  position:relative;overflow:hidden;cursor:pointer;user-select:none;
 }
 
-.w::before{
+/* Felt table surface */
+.felt{
+  position:absolute;bottom:0;left:0;right:0;height:52%;
+  background:radial-gradient(ellipse at 50% 30%, #1a5a2a 0%, #0d3a18 50%, #081808 100%);
+  border-top:3px solid #2a7a3a;
+}
+.felt::before{
   content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 55% 55% at 10% 20%,rgba(186,220,255,.55) 0%,transparent 70%),
-    radial-gradient(ellipse 45% 45% at 90% 80%,rgba(255,192,220,.5) 0%,transparent 70%),
-    radial-gradient(ellipse 40% 40% at 80% 10%,rgba(200,180,255,.4) 0%,transparent 70%);
+  background:repeating-linear-gradient(45deg,transparent,transparent 4px,rgba(255,255,255,.015) 4px,rgba(255,255,255,.015) 5px);
+}
+
+/* Table edge highlight */
+.felt::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:6px;
+  background:linear-gradient(180deg,rgba(60,180,80,.35),transparent);
+}
+
+/* Dark upper area — like a room */
+.ceiling{
+  position:absolute;top:0;left:0;right:0;height:48%;
+  background:radial-gradient(ellipse at 50% 60%, #1a1230 0%, #0a0812 100%);
+}
+
+/* Spotlight from above */
+.spotlight{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:55%;height:100%;
+  background:radial-gradient(ellipse at 50% 0%, rgba(255,240,180,.12) 0%, transparent 65%);
   pointer-events:none;
 }
 
-/* Left panel */
-.left{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:12px;
-  padding:16px 14px 16px 18px;
-  height:100%;
-  position:relative;z-index:1;
-  flex-shrink:0;
-  width:160px;
+/* Buttons — top left */
+.btns{
+  position:absolute;top:10%;left:4%;
+  display:flex;gap:10px;z-index:20;
+}
+.db{
+  width:54px;height:42px;
+  border:2px solid rgba(255,255,255,.15);
+  border-radius:10px;
+  color:#e8d8ff;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:13px;
+  cursor:pointer;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(4px);
+  box-shadow:0 4px 12px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.15);
+  transition:all .12s;
+}
+.db:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3)}
+.db.on{
+  background:rgba(120,80,220,.5);
+  border-color:rgba(160,120,255,.7);
+  color:#fff;
+  box-shadow:0 4px 16px rgba(100,60,200,.5),inset 0 1px 0 rgba(255,255,255,.25),0 0 0 1px rgba(160,120,255,.3);
 }
 
-.ttl{
-  font-size:11px;font-weight:900;letter-spacing:2px;
-  color:#a066cc;
-  text-align:center;
-  text-shadow:2px 2px 0 #f0a8d8,3px 3px 0 rgba(160,102,204,.2);
+/* Hint */
+.hint{
+  position:absolute;bottom:10%;left:50%;transform:translateX(-50%);
+  font-size:10px;font-weight:700;letter-spacing:2px;
+  color:rgba(180,160,220,.5);
+  animation:blink 1.6s infinite;z-index:10;pointer-events:none;white-space:nowrap;
+}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:.9}}
+
+/* TOTAL — big, center top of felt */
+.total-area{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-62%);
+  text-align:center;z-index:10;pointer-events:none;
+}
+.total-label{font-size:9px;font-weight:700;letter-spacing:3px;color:rgba(200,180,255,.5);margin-bottom:2px}
+.total-num{
+  font-size:56px;font-weight:900;
+  color:#fff;
+  text-shadow:0 0 30px rgba(160,120,255,.7),0 4px 8px rgba(0,0,0,.8);
+  line-height:1;
+  transition:all .2s;
+}
+.total-num.pop{animation:numPop .3s ease-out}
+@keyframes numPop{0%{transform:scale(1.4)}100%{transform:scale(1)}}
+
+.indiv{
+  display:flex;gap:8px;justify-content:center;margin-top:4px;
+}
+.iv{
+  font-size:15px;font-weight:900;
+  color:rgba(255,255,255,.6);
+  text-shadow:0 0 8px rgba(200,160,255,.4);
+}
+.iv.six{color:#ffd060;text-shadow:0 0 12px rgba(255,200,60,.7);animation:sixfl .3s 3}
+@keyframes sixfl{50%{color:#fff}}
+
+/* Dice stage */
+.stage{
+  position:absolute;
+  bottom:12%;left:50%;transform:translateX(-50%);
+  display:flex;gap:28px;align-items:flex-end;justify-content:center;
+  z-index:15;pointer-events:none;
 }
 
-.lbl{color:#c07ab8;font-size:7px;font-weight:700;letter-spacing:2px}
-
-.cnt-row{display:flex;gap:6px;justify-content:center}
-
-.cb{
-  width:36px;height:36px;
-  background:linear-gradient(170deg,#e8d5fa 0%,#c9b8f8 40%,#a88ee0 100%);
-  border:none;color:#5a2d8a;
-  font-family:'Nunito',sans-serif;font-weight:900;font-size:12px;
-  cursor:pointer;border-radius:8px;
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.7),inset 0 -2px 0 rgba(0,0,0,.08),0 4px 0 #9070c8,0 6px 0 #7050a8,0 8px 10px rgba(120,80,200,.25);
-  transition:all .1s;
+.die-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px}
+.die-shadow{
+  width:88px;height:12px;
+  background:radial-gradient(ellipse,rgba(0,0,0,.5) 0%,transparent 70%);
+  border-radius:50%;
 }
-.cb:hover{transform:translateY(-1px);box-shadow:inset 0 2px 0 rgba(255,255,255,.7),inset 0 -2px 0 rgba(0,0,0,.08),0 5px 0 #9070c8,0 7px 0 #7050a8,0 10px 12px rgba(120,80,200,.3)}
-.cb:active{transform:translateY(4px);box-shadow:inset 0 2px 0 rgba(255,255,255,.4),0 1px 0 #9070c8,0 2px 4px rgba(120,80,200,.2)}
-.cb.on{
-  background:linear-gradient(170deg,#ffd6ec 0%,#ffb0d8 40%,#f080b8 100%);
-  color:#8a1a50;
-  transform:translateY(4px);
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.7),0 1px 0 #d060a0,0 2px 4px rgba(200,80,140,.2);
-}
+.die{width:88px;height:88px}
+.die canvas{width:88px;height:88px;display:block}
+.die.rolling{animation:shake .08s infinite}
+@keyframes shake{0%{transform:rotate(-8deg) scale(1.05)}50%{transform:rotate(8deg) scale(.96)}100%{transform:rotate(-8deg) scale(1.05)}}
+.die.land{animation:bounce .4s cubic-bezier(.175,.885,.32,1.4)}
+@keyframes bounce{0%{transform:translateY(-40px) scale(.8);opacity:0}70%{transform:translateY(4px) scale(1.05)}100%{transform:translateY(0) scale(1);opacity:1}}
 
-.rb{
-  background:linear-gradient(170deg,#aaeeff 0%,#70d8f8 40%,#38b0e0 100%);
-  border:none;color:#0a4a6a;
-  font-family:'Nunito',sans-serif;font-weight:900;font-size:10px;
-  letter-spacing:1px;padding:10px 16px;
-  cursor:pointer;border-radius:10px;white-space:nowrap;
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.7),inset 0 -2px 0 rgba(0,0,0,.08),0 5px 0 #1888c0,0 7px 0 #0a5a90,0 10px 14px rgba(20,120,200,.3);
-  transition:all .12s;width:100%;text-align:center;
-}
-.rb:hover{transform:translateY(-2px);box-shadow:inset 0 2px 0 rgba(255,255,255,.7),0 7px 0 #1888c0,0 9px 0 #0a5a90,0 13px 16px rgba(20,120,200,.35)}
-.rb:active{transform:translateY(6px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 1px 0 #1888c0,0 2px 6px rgba(20,120,200,.2)}
-.rb.spin{animation:rs .09s infinite}
-@keyframes rs{0%{transform:translateY(-1px)}50%{transform:translateY(1px)}100%{transform:translateY(-1px)}}
-
-/* Result inside left panel */
-.res-box{
-  width:100%;background:rgba(255,255,255,.6);
-  border:2px solid rgba(200,160,240,.45);border-radius:10px;
-  padding:8px 10px;text-align:center;
-  box-shadow:inset 0 1px 4px rgba(180,140,220,.15);
-}
-.rt{font-size:7px;font-weight:700;color:#c07ab8;letter-spacing:2px;margin-bottom:4px}
-.rn{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:4px;min-height:20px;align-items:center}
-.rv{color:#5a7aee;font-size:16px;font-weight:900;text-shadow:0 2px 0 rgba(80,100,220,.2);min-width:18px;text-align:center}
-.rv.six{color:#f060a8;text-shadow:0 2px 0 rgba(220,80,160,.3);animation:fl .3s 3}
-@keyframes fl{50%{color:#fff;text-shadow:0 0 14px #f0a8d8}}
-.tot-row{font-size:8px;font-weight:700;color:#a880d0;letter-spacing:1px}
-.tot-row b{color:#5a7aee;font-size:14px;text-shadow:0 2px 0 rgba(80,100,220,.2)}
-
-/* Dice area — right, big */
-.right{
-  flex:1;height:100%;
-  display:flex;flex-wrap:wrap;gap:14px;
-  justify-content:center;align-items:center;
-  background:rgba(255,255,255,.38);
-  border-left:2px solid rgba(200,160,240,.35);
-  padding:14px;
-  position:relative;z-index:1;
-  box-shadow:inset 2px 0 12px rgba(180,140,220,.1);
-}
-
-.et{color:#c0a0d8;font-size:8px;font-weight:700;letter-spacing:2px;width:100%;text-align:center}
-
-.die{width:96px;height:96px;flex-shrink:0;animation:pop .3s cubic-bezier(.175,.885,.32,1.4)}
-@keyframes pop{from{transform:scale(0) rotate(-90deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
-.die canvas{width:96px;height:96px;image-rendering:pixelated;display:block}
-.die.go canvas{animation:spin .07s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.sp{position:absolute;pointer-events:none;animation:sa .7s forwards;z-index:10}
-@keyframes sa{to{transform:translateY(-36px) scale(1.4);opacity:0}}
+/* Sparkles */
+.sp{position:absolute;pointer-events:none;z-index:20;animation:spf .7s forwards;font-family:serif}
+@keyframes spf{0%{opacity:1;transform:scale(.5)}100%{opacity:0;transform:translateY(-42px) scale(1.5)}}
 </style>
 
-<div class="w">
-  <div class="left">
-    <div class="ttl">🎲 大富翁</div>
+<div class="w" id="w">
+  <div class="ceiling"></div>
+  <div class="felt"></div>
+  <div class="spotlight"></div>
 
-    <div>
-      <div class="lbl" style="text-align:center;margin-bottom:6px">骰子数量</div>
-      <div class="cnt-row" id="cb"></div>
-    </div>
-
-    <button class="rb" id="rb" onclick="roll()">⚔ 掷出命运</button>
-
-    <div class="res-box">
-      <div class="rt">✦ 结果 ✦</div>
-      <div class="rn" id="rn"><span style="color:#d8b8f0;font-size:8px;font-weight:700">— —</span></div>
-      <div class="tot-row">合计 <b id="tot">—</b></div>
-    </div>
+  <div class="btns" onclick="event.stopPropagation()">
+    <button class="db" id="b1" onclick="setCount(1)">×1</button>
+    <button class="db on" id="b2" onclick="setCount(2)">×2</button>
   </div>
 
-  <div class="right" id="da">
-    <span class="et">— 等待掷骰 —</span>
+  <div class="total-area" id="totalArea" style="display:none">
+    <div class="total-label">T O T A L</div>
+    <div class="total-num" id="totalNum">—</div>
+    <div class="indiv" id="indiv"></div>
   </div>
+
+  <div class="stage" id="stage"></div>
+
+  <div class="hint" id="hint">— 点击任意处掷骰 —</div>
 </div>
 
 <script>
-const COLS=[
-  {b:'#c8a0e8',f:'#ead5fa',d:'#6030a0',hi:'#fff'},
-  {b:'#68c0f0',f:'#c8eeff',d:'#1060b0',hi:'#fff'},
-  {b:'#f098c8',f:'#ffdaee',d:'#a02868',hi:'#fff'},
-  {b:'#80d0a8',f:'#d0f5e0',d:'#186040',hi:'#fff'},
-  {b:'#f8c870',f:'#fff2c8',d:'#885000',hi:'#fff'},
-  {b:'#98b8f8',f:'#d8eaff',d:'#1840a8',hi:'#fff'},
-];
-let sel=2,busy=false;
+let diceCount=2, busy=false;
 
-function buildCB(){
-  const wrap=document.getElementById('cb');
-  wrap.innerHTML='';
-  [1,2].forEach(n=>{
-    const b=document.createElement('button');
-    b.className='cb'+(n===sel?' on':'');
-    b.textContent=n;
-    b.onclick=()=>{sel=n;document.querySelectorAll('.cb').forEach(x=>x.classList.remove('on'));b.classList.add('on')};
-    wrap.appendChild(b);
-  });
+function setCount(n){
+  diceCount=n;
+  document.getElementById('b1').classList.toggle('on',n===1);
+  document.getElementById('b2').classList.toggle('on',n===2);
+  initDice();
 }
 
-function drawDie(canvas,val,c){
-  const S=96,R=14,P=11;
-  canvas.width=S;canvas.height=S;
+/* ---- REALISTIC DIE RENDERER ---- */
+function drawRealisticDie(canvas, val, hue){
+  const S=176; // 2x for crispness, displayed at 88px
+  canvas.width=S; canvas.height=S;
   const ctx=canvas.getContext('2d');
-  ctx.imageSmoothingEnabled=false;
 
+  const R=22; // corner radius
   function rr(x,y,w,h,r){
-    ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);
-    ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);
-    ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);
-    ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+    ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+    ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
+    ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);
+    ctx.closePath();
   }
 
-  // Drop shadow
-  ctx.shadowColor='rgba(0,0,0,.22)';ctx.shadowBlur=7;ctx.shadowOffsetY=5;
-  ctx.fillStyle=c.b;rr(1,1,S-3,S-4,R);ctx.fill();
-  ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+  // ---- BODY with 3D sides ----
+  // Bottom-right shadow face (right side)
+  ctx.fillStyle=`hsl(${hue},55%,22%)`;
+  rr(10,10,S-10,S-10,R); ctx.fill();
 
-  // Bottom face (3D thickness)
-  ctx.fillStyle=c.b;rr(1,6,S-3,S-6,R);ctx.fill();
+  // Left/top edge (lighter)
+  ctx.fillStyle=`hsl(${hue},50%,35%)`;
+  rr(4,4,S-10,S-10,R); ctx.fill();
 
-  // Top face
-  ctx.fillStyle=c.f;rr(1,1,S-3,S-7,R);ctx.fill();
+  // Main top face — rich gradient
+  const g=ctx.createLinearGradient(4,4,S-10,S-10);
+  g.addColorStop(0,   `hsl(${hue},60%,72%)`);
+  g.addColorStop(0.3, `hsl(${hue},55%,62%)`);
+  g.addColorStop(0.7, `hsl(${hue},50%,52%)`);
+  g.addColorStop(1,   `hsl(${hue},55%,40%)`);
+  ctx.fillStyle=g;
+  rr(4,4,S-14,S-14,R); ctx.fill();
 
-  // Top highlight band
-  ctx.fillStyle='rgba(255,255,255,.5)';
-  rr(P,P+1,S-3-P*2,(S-7-P*2)*.38,4);ctx.fill();
+  // Surface sheen — top-left bright reflection
+  const sheen=ctx.createRadialGradient(S*.25,S*.2,0,S*.3,S*.3,S*.55);
+  sheen.addColorStop(0,'rgba(255,255,255,.38)');
+  sheen.addColorStop(0.5,'rgba(255,255,255,.08)');
+  sheen.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=sheen;
+  rr(4,4,S-14,S-14,R); ctx.fill();
 
-  // Subtle border
-  ctx.strokeStyle=c.b;ctx.lineWidth=1.5;
-  rr(1,1,S-3,S-7,R);ctx.stroke();
+  // Edge highlight line
+  ctx.strokeStyle='rgba(255,255,255,.25)';
+  ctx.lineWidth=2;
+  rr(4,4,S-14,S-14,R); ctx.stroke();
 
-  // Dots
-  const m=(S-2)/2,o=22,r=5.5;
+  // ---- DOTS ----
+  const m=S/2-5, o=46, dr=11;
+
   const pts={
-    1:[[m,m-2]],
+    1:[[m,m]],
     2:[[m-o,m-o],[m+o,m+o]],
-    3:[[m-o,m-o-1],[m,m-1],[m+o,m+o-1]],
-    4:[[m-o,m-o],[m+o,m-o],[m-o,m+o-2],[m+o,m+o-2]],
-    5:[[m-o,m-o],[m+o,m-o],[m,m-1],[m-o,m+o-2],[m+o,m+o-2]],
-    6:[[m-o,m-o],[m+o,m-o],[m-o,m-1],[m+o,m-1],[m-o,m+o-2],[m+o,m+o-2]]
+    3:[[m-o,m-o],[m,m],[m+o,m+o]],
+    4:[[m-o,m-o],[m+o,m-o],[m-o,m+o],[m+o,m+o]],
+    5:[[m-o,m-o],[m+o,m-o],[m,m],[m-o,m+o],[m+o,m+o]],
+    6:[[m-o,m-o],[m+o,m-o],[m-o,m],[m+o,m],[m-o,m+o],[m+o,m+o]],
   };
-  (pts[val]||[]).forEach(([x,y])=>{
-    ctx.fillStyle='rgba(0,0,0,.18)';
-    ctx.beginPath();ctx.arc(x+1,y+1.5,r,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle=c.d;
-    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,.55)';
-    ctx.beginPath();ctx.arc(x-1.2,y-1.2,r*.38,0,Math.PI*2);ctx.fill();
+
+  (pts[val]||[]).forEach(([cx,cy])=>{
+    // Inset shadow ring (engraved look)
+    ctx.fillStyle='rgba(0,0,0,.35)';
+    ctx.beginPath(); ctx.arc(cx+2,cy+2,dr,0,Math.PI*2); ctx.fill();
+
+    // Dot body
+    const dg=ctx.createRadialGradient(cx-dr*.3,cy-dr*.3,0,cx,cy,dr);
+    dg.addColorStop(0,'rgba(255,255,255,.95)');
+    dg.addColorStop(0.5,'rgba(240,240,255,.85)');
+    dg.addColorStop(1,'rgba(200,200,230,.7)');
+    ctx.fillStyle=dg;
+    ctx.beginPath(); ctx.arc(cx,cy,dr,0,Math.PI*2); ctx.fill();
   });
 }
 
-function roll(){
-  if(busy)return;busy=true;
-  const btn=document.getElementById('rb');
-  btn.classList.add('spin');btn.textContent='✨ 施法中...';
-  const da=document.getElementById('da');da.innerHTML='';
-  document.getElementById('rn').innerHTML='<span style="color:#d8b8f0;font-size:8px;font-weight:700">— —</span>';
-  document.getElementById('tot').textContent='—';
+const HUES=[230, 320, 0, 150, 45, 270];
 
-  const dies=[];
-  for(let i=0;i<sel;i++){
-    const c=COLS[i%COLS.length];
-    const div=document.createElement('div');div.className='die go';
-    const cv=document.createElement('canvas');div.appendChild(cv);da.appendChild(div);
-    dies.push({div,cv,c});drawDie(cv,Math.ceil(Math.random()*6),c);
+function makeDie(i){
+  const hue=HUES[i%HUES.length];
+  const wrap=document.createElement('div');
+  wrap.className='die-wrap';
+  const dieDiv=document.createElement('div');
+  dieDiv.className='die';
+  const cv=document.createElement('canvas');
+  dieDiv.appendChild(cv);
+  const shadow=document.createElement('div');
+  shadow.className='die-shadow';
+  wrap.appendChild(dieDiv);
+  wrap.appendChild(shadow);
+  return {wrap,dieDiv,cv,hue};
+}
+
+let dieObjects=[];
+
+function initDice(){
+  const stage=document.getElementById('stage');
+  stage.innerHTML='';
+  dieObjects=[];
+  for(let i=0;i<diceCount;i++){
+    const d=makeDie(i);
+    stage.appendChild(d.wrap);
+    dieObjects.push(d);
+    drawRealisticDie(d.cv, 1, d.hue);
   }
+  document.getElementById('totalArea').style.display='none';
+}
+
+document.getElementById('w').addEventListener('click',e=>{
+  if(e.target.closest('.btns'))return;
+  doRoll();
+});
+
+function doRoll(){
+  if(busy)return; busy=true;
+  document.getElementById('hint').style.display='none';
+  document.getElementById('totalArea').style.display='none';
+
+  dieObjects.forEach(d=>{
+    d.dieDiv.className='die rolling';
+    drawRealisticDie(d.cv,Math.ceil(Math.random()*6),d.hue);
+  });
 
   let t=0;
   const iv=setInterval(()=>{
-    t++;dies.forEach(({cv,c})=>drawDie(cv,Math.ceil(Math.random()*6),c));
+    t++;
+    dieObjects.forEach(d=>drawRealisticDie(d.cv,Math.ceil(Math.random()*6),d.hue));
     if(t>=20){
       clearInterval(iv);
-      const vals=dies.map(({div,cv,c})=>{
+      const vals=dieObjects.map(d=>{
         const v=Math.ceil(Math.random()*6);
-        drawDie(cv,v,c);
-        div.classList.remove('go');
-        div.style.animation='none';void div.offsetWidth;
-        div.style.animation='pop .32s cubic-bezier(.175,.885,.32,1.4)';
+        drawRealisticDie(d.cv,v,d.hue);
+        d.dieDiv.className='die land';
         return v;
       });
-      showRes(vals);
-      btn.classList.remove('spin');btn.textContent='⚔ 再掷一次';
-      busy=false;spawnFx(da);
+      showResult(vals);
+      busy=false;
     }
   },55);
 }
 
-function showRes(vals){
-  const rn=document.getElementById('rn');rn.innerHTML='';
-  vals.forEach((v,i)=>{
-    const s=document.createElement('span');
-    s.className='rv'+(v===6?' six':'');s.textContent=v;
-    setTimeout(()=>rn.appendChild(s),i*80);
-  });
-  document.getElementById('tot').textContent=vals.reduce((a,b)=>a+b,0);
+function showResult(vals){
+  const ta=document.getElementById('totalArea');
+  const tn=document.getElementById('totalNum');
+  const indiv=document.getElementById('indiv');
+  const total=vals.reduce((a,b)=>a+b,0);
+
+  indiv.innerHTML='';
+  if(vals.length>1){
+    vals.forEach((v,i)=>{
+      const s=document.createElement('span');
+      s.className='iv'+(v===6?' six':'');
+      s.textContent=i===0?v:`+ ${v}`;
+      indiv.appendChild(s);
+    });
+  }
+
+  tn.textContent=total;
+  ta.style.display='block';
+  tn.classList.remove('pop');
+  void tn.offsetWidth;
+  tn.classList.add('pop');
+
+  spawnSparks();
+  setTimeout(()=>document.getElementById('hint').style.display='',1000);
 }
 
-function spawnFx(parent){
-  ['✦','◆','★'].forEach((g,i)=>{
+function spawnSparks(){
+  const w=document.getElementById('w');
+  const items=['✦','★','◆','•'];
+  const cols=['rgba(255,220,100,.9)','rgba(180,140,255,.9)','rgba(255,255,255,.8)'];
+  for(let i=0;i<6;i++){
     setTimeout(()=>{
-      const el=document.createElement('div');el.className='sp';el.textContent=g;
-      el.style.cssText=`left:${15+Math.random()*70}%;top:${10+Math.random()*70}%;color:${['#f0a8d8','#70c8f8','#c0a0f8'][i]};font-size:16px`;
-      parent.appendChild(el);setTimeout(()=>el.remove(),700);
-    },i*110);
-  });
+      const el=document.createElement('div');
+      el.className='sp';
+      el.textContent=items[Math.floor(Math.random()*items.length)];
+      el.style.cssText=`left:${25+Math.random()*50}%;bottom:${15+Math.random()*40}%;color:${cols[Math.floor(Math.random()*cols.length)]};font-size:${10+Math.random()*10}px`;
+      w.appendChild(el);
+      setTimeout(()=>el.remove(),700);
+    },i*70);
+  }
 }
 
-buildCB();
+initDice();
 </script>
