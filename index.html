@@ -1,320 +1,83 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>大富翁骰子</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<title>zzZ</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{overflow:hidden}
-
-.w{
-  font-family:'Nunito',sans-serif;
-  width:100vw;height:100vh;
-  background:radial-gradient(ellipse at 40% 35%,#2a1f3d 0%,#0f0a1a 70%);
-  position:fixed;top:0;left:0;
-  overflow:hidden;cursor:pointer;user-select:none;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-.felt{
-  position:absolute;bottom:0;left:0;right:0;height:55%;
-  background:radial-gradient(ellipse at 50% 20%,#1a5a2a 0%,#0d3a18 55%,#081808 100%);
-  border-top:3px solid #2a7a3a;
-}
-.felt::before{
-  content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(45deg,transparent,transparent 5px,rgba(255,255,255,.012) 5px,rgba(255,255,255,.012) 6px);
-}
-.felt::after{
-  content:'';position:absolute;top:0;left:0;right:0;height:8px;
-  background:linear-gradient(180deg,rgba(60,180,80,.3),transparent);
+body{
+    height:100vh;
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:Consolas,monospace;
+    overflow:hidden;
 }
 
-.ceiling{
-  position:absolute;top:0;left:0;right:0;height:45%;
-  background:radial-gradient(ellipse at 50% 70%,#1a1230 0%,#0a0812 100%);
+/* 扫描线 */
+body::before{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:repeating-linear-gradient(
+        transparent 0px,
+        transparent 2px,
+        rgba(0,255,120,0.05) 3px
+    );
+    pointer-events:none;
 }
 
-.spotlight{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:60%;height:100%;
-  background:radial-gradient(ellipse at 50% 0%,rgba(255,240,180,.13) 0%,transparent 60%);
-  pointer-events:none;
+/* 主ID */
+.id{
+    font-size:10vw;
+    color:#00ff9c;
+    letter-spacing:10px;
+    text-shadow:
+        0 0 5px #00ff9c,
+        0 0 20px #00ff9c,
+        0 0 40px #00ff9c;
+    animation:
+        glow 2.5s ease-in-out infinite alternate,
+        flicker 5s infinite;
 }
 
-.btns{
-  position:fixed;top:4vh;left:4vw;
-  display:flex;gap:12px;z-index:100;
-}
-.db{
-  width:64px;height:48px;
-  border:2px solid rgba(255,255,255,.15);border-radius:12px;
-  color:#e8d8ff;font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;
-  cursor:pointer;background:rgba(255,255,255,.08);
-  backdrop-filter:blur(6px);
-  box-shadow:0 4px 14px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.15);
-  transition:all .12s;
-}
-.db:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
-.db.on{
-  background:rgba(120,80,220,.5);border-color:rgba(160,120,255,.7);color:#fff;
-  box-shadow:0 4px 18px rgba(100,60,200,.5),inset 0 1px 0 rgba(255,255,255,.25),0 0 0 1px rgba(160,120,255,.3);
+/* 呼吸光效 */
+@keyframes glow{
+    from{
+        text-shadow:
+        0 0 5px #00ff9c,
+        0 0 10px #00ff9c;
+    }
+    to{
+        text-shadow:
+        0 0 20px #00ff9c,
+        0 0 60px #00ff9c;
+    }
 }
 
-.total-area{
-  position:fixed;top:4vh;right:5vw;
-  text-align:right;z-index:100;pointer-events:none;
-  display:none;
+/* 偶尔闪烁 */
+@keyframes flicker{
+    0%,18%,22%,25%,53%,57%,100%{
+        opacity:1;
+    }
+    20%,24%,55%{
+        opacity:0.4;
+    }
 }
-.total-label{font-size:11px;font-weight:700;letter-spacing:3px;color:rgba(200,180,255,.45);margin-bottom:2px}
-.total-num{
-  font-size:clamp(52px,9vw,100px);font-weight:900;
-  color:#fff;line-height:1;
-  text-shadow:0 0 40px rgba(160,120,255,.8),0 4px 12px rgba(0,0,0,.9);
-  transition:all .2s;
-}
-.total-num.pop{animation:numPop .3s ease-out}
-@keyframes numPop{0%{transform:scale(1.35)}100%{transform:scale(1)}}
-.indiv{display:flex;gap:10px;justify-content:flex-end;margin-top:6px}
-.iv{font-size:clamp(16px,2.5vw,28px);font-weight:900;color:rgba(255,255,255,.55);text-shadow:0 0 8px rgba(200,160,255,.4)}
-.iv.six{color:#ffd060;text-shadow:0 0 16px rgba(255,200,60,.8);animation:sixfl .3s 3}
-@keyframes sixfl{50%{color:#fff}}
-
-.stage{
-  position:relative;z-index:20;pointer-events:none;
-  display:flex;gap:5vw;align-items:flex-end;justify-content:center;
-  width:100%;
-  padding-bottom:6vh;
-}
-
-.die-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
-.die-shadow{
-  width:var(--ds);height:calc(var(--ds)*.14);
-  background:radial-gradient(ellipse,rgba(0,0,0,.55) 0%,transparent 70%);
-  border-radius:50%;
-}
-.die{width:var(--ds);height:var(--ds)}
-.die canvas{width:var(--ds);height:var(--ds);display:block}
-.die.rolling{animation:shake .07s infinite}
-@keyframes shake{0%{transform:rotate(-9deg) scale(1.06)}50%{transform:rotate(9deg) scale(.95)}100%{transform:rotate(-9deg) scale(1.06)}}
-.die.land{animation:bounce .42s cubic-bezier(.175,.885,.32,1.4)}
-@keyframes bounce{0%{transform:translateY(-50px) scale(.75);opacity:0}65%{transform:translateY(5px) scale(1.06)}100%{transform:translateY(0) scale(1);opacity:1}}
-
-.hint{
-  position:fixed;bottom:5vh;left:50%;transform:translateX(-50%);
-  font-size:clamp(9px,1.5vw,13px);font-weight:700;letter-spacing:3px;
-  color:rgba(180,160,220,.45);
-  animation:blink 1.8s infinite;z-index:100;pointer-events:none;white-space:nowrap;
-}
-@keyframes blink{0%,100%{opacity:.2}50%{opacity:.9}}
-
-.sp{position:fixed;pointer-events:none;z-index:200;animation:spf .75s forwards;font-family:serif}
-@keyframes spf{0%{opacity:1;transform:scale(.5)}100%{opacity:0;transform:translateY(-55px) scale(1.6)}}
 </style>
 </head>
+
 <body>
-<div class="w" id="w">
-  <div class="ceiling"></div>
-  <div class="felt"></div>
-  <div class="spotlight"></div>
 
-  <div class="btns" onclick="event.stopPropagation()">
-    <button class="db" id="b1" onclick="setCount(1)">×1</button>
-    <button class="db on" id="b2" onclick="setCount(2)">×2</button>
-  </div>
+<div class="id">zzZ</div>
 
-  <div class="total-area" id="totalArea">
-    <div class="total-label">T O T A L</div>
-    <div class="total-num" id="totalNum">—</div>
-    <div class="indiv" id="indiv"></div>
-  </div>
-
-  <div class="stage" id="stage"></div>
-
-  <div class="hint" id="hint">— 点击任意处掷骰 —</div>
-</div>
-
-<script>
-let diceCount=2, busy=false;
-const HUES=[230,320,0,150,45,270];
-
-function getDieSize(){
-  return Math.round(Math.min(window.innerWidth, window.innerHeight*1.6) * 0.2);
-}
-
-function setDieSizeVar(){
-  const s=getDieSize();
-  document.documentElement.style.setProperty('--ds', s+'px');
-}
-setDieSizeVar();
-window.addEventListener('resize',()=>{ setDieSizeVar(); initDice(); });
-
-function setCount(n){
-  diceCount=n;
-  document.getElementById('b1').classList.toggle('on',n===1);
-  document.getElementById('b2').classList.toggle('on',n===2);
-  initDice();
-}
-
-function drawRealisticDie(canvas, val, hue){
-  const S=getDieSize()*2;
-  canvas.width=S; canvas.height=S;
-  const ctx=canvas.getContext('2d');
-  const R=S*0.12;
-
-  function rr(x,y,w,h,r){
-    ctx.beginPath();
-    ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
-    ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
-    ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
-    ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);
-    ctx.closePath();
-  }
-
-  const pad=S*0.04, thick=S*0.07;
-
-  ctx.fillStyle='rgba(0,0,0,.3)';
-  rr(pad+thick+4,pad+thick+4,S-pad*2-thick,S-pad*2-thick,R); ctx.fill();
-
-  ctx.fillStyle=`hsl(${hue},55%,20%)`;
-  rr(pad+thick,pad+thick,S-pad*2-thick,S-pad*2-thick,R); ctx.fill();
-
-  ctx.fillStyle=`hsl(${hue},50%,32%)`;
-  rr(pad,pad+thick*.5,S-pad*2-thick,S-pad*2-thick,R); ctx.fill();
-
-  const g=ctx.createLinearGradient(pad,pad,S-pad,S-pad);
-  g.addColorStop(0,   `hsl(${hue},62%,75%)`);
-  g.addColorStop(0.35,`hsl(${hue},58%,63%)`);
-  g.addColorStop(0.7, `hsl(${hue},52%,50%)`);
-  g.addColorStop(1,   `hsl(${hue},56%,38%)`);
-  ctx.fillStyle=g;
-  rr(pad,pad,S-pad*2-thick,S-pad*2-thick,R); ctx.fill();
-
-  const sheen=ctx.createRadialGradient(S*.22,S*.2,0,S*.3,S*.3,S*.52);
-  sheen.addColorStop(0,'rgba(255,255,255,.4)');
-  sheen.addColorStop(.55,'rgba(255,255,255,.07)');
-  sheen.addColorStop(1,'rgba(255,255,255,0)');
-  ctx.fillStyle=sheen;
-  rr(pad,pad,S-pad*2-thick,S-pad*2-thick,R); ctx.fill();
-
-  ctx.strokeStyle='rgba(255,255,255,.22)';
-  ctx.lineWidth=2;
-  rr(pad,pad,S-pad*2-thick,S-pad*2-thick,R); ctx.stroke();
-
-  const fc=S/2-thick*.5;
-  const o=S*.245, dr=S*.063;
-
-  const pts={
-    1:[[fc,fc]],
-    2:[[fc-o,fc-o],[fc+o,fc+o]],
-    3:[[fc-o,fc-o],[fc,fc],[fc+o,fc+o]],
-    4:[[fc-o,fc-o],[fc+o,fc-o],[fc-o,fc+o],[fc+o,fc+o]],
-    5:[[fc-o,fc-o],[fc+o,fc-o],[fc,fc],[fc-o,fc+o],[fc+o,fc+o]],
-    6:[[fc-o,fc-o],[fc+o,fc-o],[fc-o,fc],[fc+o,fc],[fc-o,fc+o],[fc+o,fc+o]],
-  };
-
-  (pts[val]||[]).forEach(([cx,cy])=>{
-    ctx.fillStyle='rgba(0,0,0,.38)';
-    ctx.beginPath();ctx.arc(cx+dr*.22,cy+dr*.3,dr,0,Math.PI*2);ctx.fill();
-    const dg=ctx.createRadialGradient(cx-dr*.3,cy-dr*.3,0,cx,cy,dr);
-    dg.addColorStop(0,'rgba(255,255,255,.96)');
-    dg.addColorStop(.5,'rgba(235,235,255,.86)');
-    dg.addColorStop(1,'rgba(195,195,230,.7)');
-    ctx.fillStyle=dg;
-    ctx.beginPath();ctx.arc(cx,cy,dr,0,Math.PI*2);ctx.fill();
-  });
-}
-
-let dieObjects=[];
-
-function initDice(){
-  const stage=document.getElementById('stage');
-  stage.innerHTML=''; dieObjects=[];
-  for(let i=0;i<diceCount;i++){
-    const hue=HUES[i%HUES.length];
-    const wrap=document.createElement('div'); wrap.className='die-wrap';
-    const dieDiv=document.createElement('div'); dieDiv.className='die';
-    const cv=document.createElement('canvas');
-    dieDiv.appendChild(cv);
-    const shadow=document.createElement('div'); shadow.className='die-shadow';
-    wrap.appendChild(dieDiv); wrap.appendChild(shadow);
-    stage.appendChild(wrap);
-    dieObjects.push({wrap,dieDiv,cv,hue});
-    drawRealisticDie(cv,1,hue);
-  }
-  document.getElementById('totalArea').style.display='none';
-}
-
-document.getElementById('w').addEventListener('click',e=>{
-  if(e.target.closest('.btns'))return;
-  doRoll();
-});
-
-function doRoll(){
-  if(busy)return; busy=true;
-  document.getElementById('hint').style.display='none';
-  document.getElementById('totalArea').style.display='none';
-  dieObjects.forEach(d=>{
-    d.dieDiv.className='die rolling';
-    drawRealisticDie(d.cv,Math.ceil(Math.random()*6),d.hue);
-  });
-  let t=0;
-  const iv=setInterval(()=>{
-    t++;
-    dieObjects.forEach(d=>drawRealisticDie(d.cv,Math.ceil(Math.random()*6),d.hue));
-    if(t>=20){
-      clearInterval(iv);
-      const vals=dieObjects.map(d=>{
-        const v=Math.ceil(Math.random()*6);
-        drawRealisticDie(d.cv,v,d.hue);
-        d.dieDiv.className='die land';
-        return v;
-      });
-      showResult(vals);
-      busy=false;
-    }
-  },55);
-}
-
-function showResult(vals){
-  const ta=document.getElementById('totalArea');
-  const tn=document.getElementById('totalNum');
-  const indiv=document.getElementById('indiv');
-  const total=vals.reduce((a,b)=>a+b,0);
-  indiv.innerHTML='';
-  if(vals.length>1){
-    vals.forEach((v,i)=>{
-      const s=document.createElement('span');
-      s.className='iv'+(v===6?' six':'');
-      s.textContent=i===0?`${v}`:` + ${v}`;
-      indiv.appendChild(s);
-    });
-  }
-  tn.textContent=total;
-  ta.style.display='block';
-  tn.classList.remove('pop'); void tn.offsetWidth; tn.classList.add('pop');
-  spawnSparks();
-  setTimeout(()=>document.getElementById('hint').style.display='',1000);
-}
-
-function spawnSparks(){
-  const items=['✦','★','◆','•','✸'];
-  const cols=['rgba(255,220,100,.95)','rgba(180,140,255,.95)','rgba(255,255,255,.85)','rgba(100,220,160,.9)'];
-  for(let i=0;i<8;i++){
-    setTimeout(()=>{
-      const el=document.createElement('div'); el.className='sp';
-      el.textContent=items[Math.floor(Math.random()*items.length)];
-      el.style.cssText=`left:${20+Math.random()*60}vw;bottom:${18+Math.random()*40}vh;color:${cols[Math.floor(Math.random()*cols.length)]};font-size:${14+Math.random()*14}px`;
-      document.getElementById('w').appendChild(el);
-      setTimeout(()=>el.remove(),750);
-    },i*65);
-  }
-}
-
-initDice();
-</script>
 </body>
 </html>
