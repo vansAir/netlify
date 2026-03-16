@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🎩 大富翁 · 金币银行</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+<div id="loginPage" class="page active">
+  <div>
+    <div style="text-align:center;margin-bottom:32px">
+      <span style="font-size:64px;display:block;margin-bottom:12px;filter:drop-shadow(0 4px 20px rgba(245,200,66,0.5))">🎩</span>
+      <div style="font-family:'Cinzel Decorative',serif;color:var(--gold);font-size:28px;font-weight:900;text-shadow:0 0 30px rgba(245,200,66,0.6);letter-spacing:2px">MONOPOLY</div>
+      <div style="color:rgba(245,200,66,0.5);font-size:12px;letter-spacing:4px;margin-top:6px">大富翁 · 金币银行</div>
+    </div>
+    <div class="login-box">
+      <div class="login-title">
+        <span class="login-emoji">🏦</span>
+        <h2>进入银行</h2>
+        <p>输入昵称以开始游戏</p>
+      </div>
+      <div class="input-group">
+        <label class="input-label">🪪 玩家昵称</label>
+        <input type="text" id="loginName" placeholder="输入你的昵称..." maxlength="10" autocomplete="off">
+      </div>
+      <button class="btn btn-gold" onclick="doLogin()">🎲 进入游戏</button>
+      <div style="margin-top:16px;text-align:center">
+        <button class="btn btn-ghost btn-sm" onclick="goAdmin()">🔐 管理员入口</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="homePage" class="page">
+  <div class="header">
+    <span class="header-title">🏦 资金总览</span>
+    <button class="refresh-btn" onclick="loadPlayers()">🔄 刷新</button>
+  </div>
+  <div id="myBalance" class="my-balance"></div>
+  <div class="card animate-in">
+    <div class="card-title">👑 财富排行榜</div>
+    <div id="playerList"><div class="loading">加载中</div></div>
+  </div>
+  <div class="ornament">✦ ✦ ✦</div>
+</div>
+
+<div id="transferPage" class="page">
+  <div class="header">
+    <span class="header-title">💸 金币转账</span>
+    <button class="refresh-btn" onclick="initTransferPage()">🔄 刷新</button>
+  </div>
+  <div style="padding:20px 16px 0">
+    <div class="card">
+      <div class="card-title">👤 玩家转账</div>
+      <div class="input-group">
+        <span class="player-select-label">转账给</span>
+        <div id="transferToGrid" class="player-select-grid"><div class="loading">加载中</div></div>
+        <div class="selected-display" id="transferSelectedDisplay"></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">金额</label>
+        <div class="amount-row">
+          <input type="number" id="transferAmt" placeholder="输入金额" min="1" step="1">
+          <div class="unit-switch">
+            <span class="unit-opt active" data-val="1" onclick="switchUnit(this, 'transferUnit', 1)">K</span>
+            <span class="unit-opt" data-val="1000" onclick="switchUnit(this, 'transferUnit', 1000)">M</span>
+            <input type="hidden" id="transferUnit" value="1">
+          </div>
+        </div>
+        <div class="quick-amounts">
+          <span class="quick-btn" onclick="setAmt('transferAmt','transferUnit',100,1)">100K</span>
+          <span class="quick-btn" onclick="setAmt('transferAmt','transferUnit',500,1)">500K</span>
+          <span class="quick-btn" onclick="setAmt('transferAmt','transferUnit',1,1000)">1M</span>
+          <span class="quick-btn" onclick="setAmt('transferAmt','transferUnit',2,1000)">2M</span> <span class="quick-btn" onclick="setAmt('transferAmt','transferUnit',5,1000)">5M</span>
+          <span class="quick-btn" onclick="setAmt('transferAmt','transferUnit',10,1000)">10M</span>
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="doTransfer()">💸 确认转账</button>
+    </div>
+
+    <div class="card" style="margin-top:0">
+      <div class="card-title">🏛️ 银行还款</div>
+      <p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:14px">将金币还给银行（从你的账户扣除）</p>
+      <div class="input-group">
+        <label class="input-label">还款金额</label>
+        <div class="amount-row">
+          <input type="number" id="bankAmt" placeholder="输入金额" min="1" step="1">
+          <div class="unit-switch">
+            <span class="unit-opt active" data-val="1" onclick="switchUnit(this, 'bankUnit', 1)">K</span>
+            <span class="unit-opt" data-val="1000" onclick="switchUnit(this, 'bankUnit', 1000)">M</span>
+            <input type="hidden" id="bankUnit" value="1">
+          </div>
+        </div>
+        <div class="quick-amounts">
+          <span class="quick-btn" onclick="setAmt('bankAmt','bankUnit',100,1)">100K</span>
+          <span class="quick-btn" onclick="setAmt('bankAmt','bankUnit',500,1)">500K</span>
+          <span class="quick-btn" onclick="setAmt('bankAmt','bankUnit',1,1000)">1M</span>
+          <span class="quick-btn" onclick="setAmt('bankAmt','bankUnit',2,1000)">2M</span> <span class="quick-btn" onclick="setAmt('bankAmt','bankUnit',5,1000)">5M</span>
+        </div>
+      </div>
+      <button class="btn btn-red" onclick="doPayBank()">🏛️ 还款给银行</button>
+    </div>
+  </div>
+</div>
+
+<div id="adminPage" class="page">
+  <div class="header">
+    <span class="header-title">⚙️ 管理面板</span>
+    <button class="refresh-btn" onclick="loadAdminPlayers()">🔄 刷新</button>
+  </div>
+
+  <div id="adminLock" style="padding:40px 16px">
+    <div style="margin-bottom:12px">
+      <button class="btn btn-ghost btn-sm" style="width:auto" onclick="backFromAdmin()">← 返回</button>
+    </div>
+    <div class="card">
+      <div class="card-title">🔐 管理员验证</div>
+      <div class="input-group">
+        <label class="input-label">管理员密码</label>
+        <input type="password" id="adminPwd" placeholder="输入密码..." maxlength="20">
+      </div>
+      <button class="btn btn-gold" onclick="verifyAdmin()">🔓 解锁</button>
+    </div>
+  </div>
+
+  <div id="adminPanel" style="display:none;padding:16px 0">
+    <div style="text-align:center;margin-bottom:8px">
+      <span class="admin-badge">⚡ 管理员模式</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎁 统一发放资金</div>
+      <div class="input-group">
+        <label class="input-label">发放金额（每人）</label>
+        <div class="amount-row">
+          <input type="number" id="giveAmt" placeholder="输入金额" min="1" step="1">
+          <div class="unit-switch">
+            <span class="unit-opt active" data-val="1" onclick="switchUnit(this, 'giveUnit', 1)">K</span>
+            <span class="unit-opt" data-val="1000" onclick="switchUnit(this, 'giveUnit', 1000)">M</span>
+            <input type="hidden" id="giveUnit" value="1">
+          </div>
+        </div>
+        <div class="quick-amounts">
+          <span class="quick-btn" onclick="setAmt('giveAmt','giveUnit',500,1)">500K</span>
+          <span class="quick-btn" onclick="setAmt('giveAmt','giveUnit',1,1000)">1M</span>
+          <span class="quick-btn" onclick="setAmt('giveAmt','giveUnit',2,1000)">2M</span> <span class="quick-btn" onclick="setAmt('giveAmt','giveUnit',5,1000)">5M</span>
+        </div>
+      </div>
+      <button class="btn btn-green" onclick="doGiveAll()">💰 发放给所有人</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">➕ 单独增加资金</div>
+      <div class="input-group">
+        <span class="player-select-label">目标玩家</span>
+        <div id="addTargetGrid" class="player-select-grid"><div class="loading">加载中</div></div>
+        <div class="selected-display" id="addTargetSelectedDisplay"></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">增加金额</label>
+        <div class="amount-row">
+          <input type="number" id="addAmt" placeholder="输入金额" min="1" step="1">
+          <div class="unit-switch">
+            <span class="unit-opt active" data-val="1" onclick="switchUnit(this, 'addUnit', 1)">K</span>
+            <span class="unit-opt" data-val="1000" onclick="switchUnit(this, 'addUnit', 1000)">M</span>
+            <input type="hidden" id="addUnit" value="1">
+          </div>
+        </div>
+        <div class="quick-amounts">
+          <span class="quick-btn" onclick="setAmt('addAmt','addUnit',500,1)">500K</span>
+          <span class="quick-btn" onclick="setAmt('addAmt','addUnit',1,1000)">1M</span>
+          <span class="quick-btn" onclick="setAmt('addAmt','addUnit',2,1000)">2M</span> <span class="quick-btn" onclick="setAmt('addAmt','addUnit',5,1000)">5M</span>
+          <span class="quick-btn" onclick="setAmt('addAmt','addUnit',10,1000)">10M</span>
+        </div>
+      </div>
+      <button class="btn btn-green" onclick="doAddCoins()">✅ 确认增加</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔄 重置游戏</div>
+      <p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:14px">将所有玩家金币归零，谨慎操作！</p>
+      <button class="btn btn-danger" onclick="doReset()">⚠️ 重置所有玩家金币</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🗑️ 删除玩家</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <label style="color:rgba(255,255,255,0.5);font-size:13px;display:flex;align-items:center;gap:6px;cursor:pointer">
+          <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)" style="accent-color:var(--red)">
+          全选
+        </label>
+        <button class="btn btn-danger btn-sm" onclick="doDelete()" style="width:auto">🗑️ 删除选中</button>
+      </div>
+      <div id="adminPlayerList"><div class="loading">加载中</div></div>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav" id="bottomNav" style="display:none">
+  <button class="nav-item active" id="nav-home" onclick="showTab('home')">
+    <span class="nav-icon">🏦</span>
+    <span class="nav-label">资金榜</span>
+  </button>
+  <button class="nav-item" id="nav-transfer" onclick="showTab('transfer')">
+    <span class="nav-icon">💸</span>
+    <span class="nav-label">转账</span>
+  </button>
+  <button class="nav-item" id="nav-admin" onclick="showAdminTab()">
+    <span class="nav-icon">⚙️</span>
+    <span class="nav-label">管理</span>
+  </button>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script src="./js/app.js"></script>
+</body>
+</html>

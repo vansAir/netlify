@@ -1,0 +1,512 @@
+:root {
+    --gold: #F5C842;
+    --gold-light: #FFE680;
+    --gold-dark: #C8960C;
+    --red: #C0392B;
+    --red-dark: #922B21;
+    --green: #1A7A4A;
+    --green-light: #27AE60;
+    --navy: #0D1B3E;
+    --navy-light: #1A2F5A;
+    --cream: #FFF8E7;
+    --cream-dark: #F0E6CC;
+    --shadow: rgba(0,0,0,0.5);
+    --border-ornate: 3px solid var(--gold-dark);
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  
+  body {
+    font-family: 'Noto Serif SC', serif;
+    background: var(--navy);
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  /* ===== 背景图案 ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(245,200,66,0.04) 0px, rgba(245,200,66,0.04) 1px, transparent 1px, transparent 50px),
+      repeating-linear-gradient(-45deg, rgba(245,200,66,0.04) 0px, rgba(245,200,66,0.04) 1px, transparent 1px, transparent 50px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  .app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; height: 100vh; overflow: hidden; }
+  
+  /* ===== 页面切换 ===== */
+  .page { display: none; position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 80px; background: var(--navy); }
+  .page.active { display: block; }
+  #loginPage.active { display: flex; }
+  
+  /* ===== Header ===== */
+  .header {
+    background: linear-gradient(135deg, var(--navy-light) 0%, #0A1628 100%);
+    border-bottom: 3px solid var(--gold-dark);
+    padding: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .header-title {
+    font-family: 'Cinzel Decorative', serif;
+    color: var(--gold);
+    font-size: 18px;
+    text-shadow: 0 0 20px rgba(245,200,66,0.5);
+    letter-spacing: 1px;
+  }
+  
+  .refresh-btn {
+    background: none;
+    border: 1px solid var(--gold-dark);
+    color: var(--gold);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .refresh-btn:active { background: rgba(245,200,66,0.15); transform: scale(0.95); }
+  
+  /* ===== 卡片 ===== */
+  .card {
+    background: linear-gradient(145deg, rgba(255,248,231,0.06) 0%, rgba(255,248,231,0.02) 100%);
+    border: 1px solid rgba(245,200,66,0.25);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 0 16px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
+  }
+  
+  .card-title {
+    color: var(--gold);
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(245,200,66,0.4), transparent);
+  }
+  
+  /* ===== 输入框 ===== */
+  .input-group { margin-bottom: 14px; }
+  .input-label { color: rgba(245,200,66,0.7); font-size: 12px; margin-bottom: 6px; display: block; letter-spacing: 1px; }
+  
+  input[type="text"], input[type="password"], input[type="number"] {
+    width: 100%;
+    background: rgba(13,27,62,0.8);
+    border: 1px solid rgba(245,200,66,0.3);
+    border-radius: 10px;
+    color: var(--cream);
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(245,200,66,0.1); }
+  
+  .amount-row { display: flex; gap: 8px; }
+  .amount-row input[type="number"] { flex: 1; }
+  
+  /* ===== K/M 单位切换按钮 ===== */
+  .unit-switch {
+    display: flex;
+    background: rgba(13,27,62,0.8);
+    border: 1px solid rgba(245,200,66,0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    width: 90px;
+    flex-shrink: 0;
+  }
+  .unit-opt {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.4);
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .unit-opt:first-child {
+    border-right: 1px solid rgba(245,200,66,0.2);
+  }
+  .unit-opt.active {
+    background: rgba(245,200,66,0.2);
+    color: var(--gold);
+  }
+  
+  /* ===== 按钮 ===== */
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn:active { transform: scale(0.97); }
+  
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+    color: var(--navy);
+    box-shadow: 0 4px 20px rgba(245,200,66,0.3), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .btn-gold:active { box-shadow: 0 2px 10px rgba(245,200,66,0.2); }
+  
+  .btn-red {
+    background: linear-gradient(135deg, var(--red-dark), var(--red));
+    color: white;
+    box-shadow: 0 4px 15px rgba(192,57,43,0.3);
+  }
+  
+  .btn-green {
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: white;
+    box-shadow: 0 4px 15px rgba(39,174,96,0.3);
+  }
+  
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(245,200,66,0.3);
+    color: rgba(245,200,66,0.7);
+  }
+  
+  .btn-sm {
+    width: auto;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  
+  .btn-danger {
+    background: linear-gradient(135deg, #7B241C, var(--red-dark));
+    color: white;
+    font-size: 13px;
+    padding: 10px;
+  }
+  
+  /* ===== 玩家列表 ===== */
+  .player-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 12px;
+    border-bottom: 1px solid rgba(245,200,66,0.1);
+    transition: background 0.15s;
+  }
+  .player-item:last-child { border-bottom: none; }
+  .player-item:active { background: rgba(245,200,66,0.05); }
+  
+  .player-rank {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-right: 10px;
+  }
+  .rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #333; }
+  .rank-2 { background: linear-gradient(135deg, #C0C0C0, #A8A8A8); color: #333; }
+  .rank-3 { background: linear-gradient(135deg, #CD7F32, #A0522D); color: white; }
+  .rank-n { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+  
+  .player-name { flex: 1; color: var(--cream); font-size: 15px; }
+  .player-self { color: var(--gold); }
+  
+  .player-coins { text-align: right; }
+  .coins-main { color: var(--gold); font-size: 16px; font-weight: 700; display: block; }
+  .coins-sub { color: rgba(245,200,66,0.5); font-size: 11px; }
+  
+  /* ===== 我的余额大显示 ===== */
+  .my-balance {
+    text-align: center;
+    padding: 10px 20px 20px;
+  }
+  .balance-label { color: rgba(245,200,66,0.6); font-size: 12px; letter-spacing: 3px; margin-bottom: 4px; }
+  .balance-amount { font-size: 42px; font-weight: 700; color: var(--gold); text-shadow: 0 0 30px rgba(245,200,66,0.4); line-height: 1; }
+  .balance-name { color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 4px; }
+  
+  /* ===== 底部导航 ===== */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: linear-gradient(180deg, rgba(10,18,40,0.95) 0%, rgba(5,10,25,0.98) 100%);
+    border-top: 1px solid rgba(245,200,66,0.25);
+    display: flex;
+    z-index: 200;
+    backdrop-filter: blur(10px);
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0 12px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    transition: all 0.2s;
+    gap: 3px;
+  }
+  .nav-icon { font-size: 22px; }
+  .nav-label { font-size: 11px; color: rgba(245,200,66,0.5); font-family: 'Noto Serif SC', serif; }
+  .nav-item.active .nav-label { color: var(--gold); }
+  .nav-item.active .nav-icon { filter: drop-shadow(0 0 6px rgba(245,200,66,0.6)); }
+  
+  /* ===== Toast提示 ===== */
+  .toast {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: rgba(10,18,40,0.95);
+    border: 1px solid var(--gold-dark);
+    border-radius: 30px;
+    color: var(--gold);
+    padding: 10px 24px;
+    font-size: 14px;
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.3s;
+    white-space: nowrap;
+    max-width: 90vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.error { border-color: var(--red); color: #ff8080; }
+  .toast.success { border-color: var(--green-light); color: #80ffb0; }
+  
+  /* ===== 登录页 ===== */
+  #loginPage {
+    padding: 40px 20px;
+    overflow: hidden;
+    background: var(--navy);
+  }
+  #loginPage.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  .login-box {
+    width: 100%;
+    max-width: 340px;
+    background: linear-gradient(145deg, rgba(255,248,231,0.07), rgba(255,248,231,0.02));
+    border: 1px solid rgba(245,200,66,0.3);
+    border-radius: 20px;
+    padding: 32px 24px;
+    position: relative;
+  }
+  .login-box::before {
+    content: '✦ ✦ ✦';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy);
+    padding: 0 12px;
+    color: var(--gold-dark);
+    font-size: 12px;
+    letter-spacing: 4px;
+  }
+  .login-title {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .login-emoji { font-size: 48px; display: block; margin-bottom: 8px; }
+  .login-title h2 {
+    font-family: 'Cinzel Decorative', serif;
+    color: var(--gold);
+    font-size: 20px;
+    text-shadow: 0 0 20px rgba(245,200,66,0.4);
+  }
+  .login-title p { color: rgba(255,255,255,0.4); font-size: 12px; margin-top: 4px; }
+  
+  /* ===== 管理员页 ===== */
+  .admin-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, var(--red-dark), var(--red));
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .player-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-bottom: 1px solid rgba(245,200,66,0.08);
+  }
+  .player-checkbox-item:last-child { border-bottom: none; }
+  .player-checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--red);
+    flex-shrink: 0;
+  }
+  
+  /* ===== 加载动画 ===== */
+  .loading {
+    text-align: center;
+    padding: 30px;
+    color: rgba(245,200,66,0.4);
+    font-size: 14px;
+  }
+  .loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(245,200,66,0.2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  
+  /* ===== 装饰元素 ===== */
+  .ornament {
+    text-align: center;
+    color: rgba(245,200,66,0.25);
+    font-size: 12px;
+    letter-spacing: 6px;
+    padding: 8px 0;
+  }
+  
+  /* ===== 空状态 ===== */
+  .empty-state {
+    text-align: center;
+    padding: 30px 20px;
+    color: rgba(255,255,255,0.3);
+    font-size: 14px;
+  }
+  
+  /* ===== 金额输入行 ===== */
+  .quick-amounts {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .quick-btn {
+    background: rgba(245,200,66,0.1);
+    border: 1px solid rgba(245,200,66,0.25);
+    color: rgba(245,200,66,0.8);
+    padding: 5px 10px;
+    border-radius: 16px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .quick-btn:active { background: rgba(245,200,66,0.25); }
+  
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(245,200,66,0.2); border-radius: 2px; }
+  
+  /* ===== 玩家选择按钮 ===== */
+  .player-select-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .player-select-btn {
+    background: rgba(13,27,62,0.8);
+    border: 1px solid rgba(245,200,66,0.25);
+    border-radius: 10px;
+    padding: 10px 10px;
+    cursor: pointer;
+    transition: all 0.18s;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .player-select-btn:active { transform: scale(0.96); }
+  .player-select-btn.selected {
+    border-color: var(--gold);
+    background: rgba(245,200,66,0.12);
+    box-shadow: 0 0 0 2px rgba(245,200,66,0.2);
+  }
+  .player-select-btn .psb-name {
+    color: var(--cream);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .player-select-btn .psb-coins {
+    color: rgba(245,200,66,0.7);
+    font-size: 12px;
+  }
+  .player-select-btn.selected .psb-name { color: var(--gold); }
+  .player-select-label {
+    color: rgba(245,200,66,0.7);
+    font-size: 12px;
+    margin-bottom: 8px;
+    display: block;
+    letter-spacing: 1px;
+  }
+  .selected-display {
+    color: var(--gold);
+    font-size: 13px;
+    margin-top: 6px;
+    min-height: 18px;
+    letter-spacing: 0.5px;
+  }
+  
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-in { animation: fadeIn 0.3s ease forwards; }
