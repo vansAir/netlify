@@ -1,83 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>zzZ</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    height:100vh;
-    background:#000;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-family:Consolas,monospace;
-    overflow:hidden;
-}
-
-/* 扫描线 */
-body::before{
-    content:"";
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:repeating-linear-gradient(
-        transparent 0px,
-        transparent 2px,
-        rgba(0,255,120,0.05) 3px
-    );
-    pointer-events:none;
-}
-
-/* 主ID */
-.id{
-    font-size:10vw;
-    color:#00ff9c;
-    letter-spacing:10px;
-    text-shadow:
-        0 0 5px #00ff9c,
-        0 0 20px #00ff9c,
-        0 0 40px #00ff9c;
-    animation:
-        glow 2.5s ease-in-out infinite alternate,
-        flicker 5s infinite;
-}
-
-/* 呼吸光效 */
-@keyframes glow{
-    from{
-        text-shadow:
-        0 0 5px #00ff9c,
-        0 0 10px #00ff9c;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zzZ</title>
+  <style>
+    :root{
+      --bg:#030506;
+      --bg2:#071014;
+      --green:#00ff9f;
+      --green-dim:rgba(0,255,159,.18);
+      --green-fade:rgba(0,255,159,.08);
+      --text:#b7ffd9;
+      --danger:#7dffbf;
     }
-    to{
-        text-shadow:
-        0 0 20px #00ff9c,
-        0 0 60px #00ff9c;
-    }
-}
 
-/* 偶尔闪烁 */
-@keyframes flicker{
-    0%,18%,22%,25%,53%,57%,100%{
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html,body{
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:radial-gradient(circle at center, #071014 0%, #030506 45%, #010202 100%);
+      color:var(--text);
+      font-family:Consolas, "Courier New", monospace;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        linear-gradient(rgba(255,255,255,0.02), rgba(255,255,255,0.01)),
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0px,
+          transparent 2px,
+          rgba(0,255,159,0.045) 3px,
+          transparent 4px
+        );
+      pointer-events:none;
+      z-index:20;
+      mix-blend-mode:screen;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        linear-gradient(90deg, rgba(0,255,159,0.035) 1px, transparent 1px),
+        linear-gradient(rgba(0,255,159,0.035) 1px, transparent 1px);
+      background-size:40px 40px;
+      mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+      pointer-events:none;
+      z-index:1;
+    }
+
+    .noise,
+    .vignette,
+    .scan-move,
+    .hud,
+    .center-wrap,
+    .logs{
+      position:absolute;
+      inset:0;
+    }
+
+    .noise{
+      opacity:.06;
+      z-index:2;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.15) 0 1px, transparent 1px),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,.12) 0 1px, transparent 1px),
+        radial-gradient(circle at 50% 80%, rgba(255,255,255,.12) 0 1px, transparent 1px);
+      background-size: 120px 120px, 170px 170px, 90px 90px;
+      animation: noiseShift .35s infinite steps(2);
+    }
+
+    .vignette{
+      z-index:3;
+      pointer-events:none;
+      box-shadow: inset 0 0 180px rgba(0,0,0,.85);
+    }
+
+    .scan-move{
+      z-index:4;
+      pointer-events:none;
+      overflow:hidden;
+    }
+
+    .scan-move::before{
+      content:"";
+      position:absolute;
+      left:0;
+      width:100%;
+      height:140px;
+      background:linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0,255,159,.02) 20%,
+        rgba(0,255,159,.13) 50%,
+        rgba(0,255,159,.02) 80%,
+        transparent 100%
+      );
+      filter:blur(8px);
+      animation: scan 5.5s linear infinite;
+    }
+
+    .hud{
+      z-index:5;
+      pointer-events:none;
+    }
+
+    .corner{
+      position:absolute;
+      width:120px;
+      height:120px;
+      border-color:var(--green-dim);
+      filter:drop-shadow(0 0 10px rgba(0,255,159,.18));
+    }
+
+    .corner.tl{top:28px;left:28px;border-top:1px solid;border-left:1px solid;}
+    .corner.tr{top:28px;right:28px;border-top:1px solid;border-right:1px solid;}
+    .corner.bl{bottom:28px;left:28px;border-bottom:1px solid;border-left:1px solid;}
+    .corner.br{bottom:28px;right:28px;border-bottom:1px solid;border-right:1px solid;}
+
+    .topbar,
+    .bottombar{
+      position:absolute;
+      left:36px;
+      right:36px;
+      display:flex;
+      justify-content:space-between;
+      font-size:12px;
+      color:rgba(183,255,217,.5);
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+
+    .topbar{ top:18px; }
+    .bottombar{ bottom:18px; }
+
+    .logs{
+      z-index:7;
+      padding:72px 52px;
+      pointer-events:none;
+      font-size:13px;
+      line-height:1.8;
+      color:rgba(183,255,217,.55);
+    }
+
+    .logline{
+      white-space:nowrap;
+      opacity:0;
+      transform:translateY(6px);
+      animation: logIn .5s forwards;
+      text-shadow:0 0 8px rgba(0,255,159,.12);
+    }
+
+    .center-wrap{
+      z-index:10;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      pointer-events:none;
+    }
+
+    .core{
+      position:relative;
+      min-width:min(88vw,900px);
+      min-height:300px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .ring{
+      position:absolute;
+      border:1px solid rgba(0,255,159,.08);
+      border-radius:50%;
+      animation: rotate 18s linear infinite;
+    }
+
+    .ring.r1{ width:220px; height:220px; }
+    .ring.r2{ width:320px; height:320px; animation-direction:reverse; animation-duration:26s; }
+    .ring.r3{ width:460px; height:460px; animation-duration:40s; }
+
+    .ring::before,
+    .ring::after{
+      content:"";
+      position:absolute;
+      background:var(--green);
+      box-shadow:0 0 12px var(--green), 0 0 24px var(--green);
+      opacity:.75;
+    }
+
+    .ring::before{
+      width:10px;height:2px;
+      top:50%;left:-5px;
+      transform:translateY(-50%);
+    }
+
+    .ring::after{
+      width:2px;height:10px;
+      top:-5px;left:50%;
+      transform:translateX(-50%);
+    }
+
+    .idbox{
+      position:relative;
+      padding:28px 46px;
+      border:1px solid rgba(0,255,159,.14);
+      background:linear-gradient(180deg, rgba(0,255,159,.035), rgba(0,255,159,.015));
+      box-shadow:
+        inset 0 0 40px rgba(0,255,159,.03),
+        0 0 30px rgba(0,255,159,.07),
+        0 0 80px rgba(0,255,159,.05);
+      backdrop-filter: blur(2px);
+    }
+
+    .idbox::before,
+    .idbox::after{
+      content:"";
+      position:absolute;
+      left:10px;
+      right:10px;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(0,255,159,.4), transparent);
+    }
+
+    .idbox::before{ top:8px; }
+    .idbox::after{ bottom:8px; }
+
+    .id{
+      position:relative;
+      font-size:clamp(60px, 12vw, 168px);
+      letter-spacing:.24em;
+      padding-left:.24em;
+      color:var(--green);
+      text-transform:none;
+      text-shadow:
+        0 0 8px rgba(0,255,159,.8),
+        0 0 18px rgba(0,255,159,.55),
+        0 0 42px rgba(0,255,159,.28);
+      animation:
+        pulse 2.8s ease-in-out infinite,
+        flicker 4.2s infinite,
+        glitchSkew 5.5s infinite steps(1);
+    }
+
+    .id::before,
+    .id::after{
+      content:attr(data-text);
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.75;
+    }
+
+    .id::before{
+      color:#66ffd0;
+      transform:translate(-2px,0);
+      clip-path:polygon(0 2%,100% 2%,100% 38%,0 38%);
+      animation: glitch1 2.6s infinite steps(2);
+    }
+
+    .id::after{
+      color:#00ff73;
+      transform:translate(2px,0);
+      clip-path:polygon(0 62%,100% 62%,100% 100%,0 100%);
+      animation: glitch2 3.1s infinite steps(2);
+    }
+
+    .caret{
+      display:inline-block;
+      width:.6ch;
+      margin-left:.15em;
+      color:var(--green);
+      animation: blink .9s steps(1) infinite;
+      text-shadow:0 0 10px var(--green);
+    }
+
+    .bootline{
+      position:absolute;
+      left:50%;
+      bottom:calc(50% - 120px);
+      transform:translateX(-50%);
+      font-size:12px;
+      letter-spacing:3px;
+      color:rgba(183,255,217,.56);
+      text-transform:uppercase;
+      white-space:nowrap;
+      opacity:.9;
+    }
+
+    @keyframes scan{
+      from{ transform:translateY(-180px); }
+      to{ transform:translateY(calc(100vh + 180px)); }
+    }
+
+    @keyframes noiseShift{
+      0%{ transform:translate(0,0); }
+      25%{ transform:translate(1px,-1px); }
+      50%{ transform:translate(-1px,1px); }
+      75%{ transform:translate(1px,1px); }
+      100%{ transform:translate(0,0); }
+    }
+
+    @keyframes rotate{
+      from{ transform:rotate(0deg); }
+      to{ transform:rotate(360deg); }
+    }
+
+    @keyframes pulse{
+      0%,100%{
+        transform:scale(1);
+        filter:brightness(1);
+      }
+      50%{
+        transform:scale(1.02);
+        filter:brightness(1.18);
+      }
+    }
+
+    @keyframes flicker{
+      0%, 15%, 18%, 22%, 49%, 52%, 100%{ opacity:1; }
+      16%, 21%, 50%{ opacity:.72; }
+      17%, 51%{ opacity:.92; }
+    }
+
+    @keyframes blink{
+      0%,49%{ opacity:1; }
+      50%,100%{ opacity:0; }
+    }
+
+    @keyframes glitch1{
+      0%, 100%{ transform:translate(-2px,0); }
+      20%{ transform:translate(2px,-1px); }
+      40%{ transform:translate(-3px,1px); }
+      60%{ transform:translate(3px,0); }
+      80%{ transform:translate(-1px,-1px); }
+    }
+
+    @keyframes glitch2{
+      0%, 100%{ transform:translate(2px,0); }
+      20%{ transform:translate(-2px,1px); }
+      40%{ transform:translate(3px,-1px); }
+      60%{ transform:translate(-3px,0); }
+      80%{ transform:translate(1px,1px); }
+    }
+
+    @keyframes glitchSkew{
+      0%, 100%{ transform:skewX(0deg); }
+      94%{ transform:skewX(0deg); }
+      95%{ transform:skewX(2deg); }
+      96%{ transform:skewX(-3deg); }
+      97%{ transform:skewX(1deg); }
+      98%{ transform:skewX(0deg); }
+    }
+
+    @keyframes logIn{
+      to{
         opacity:1;
+        transform:translateY(0);
+      }
     }
-    20%,24%,55%{
-        opacity:0.4;
+
+    @media (max-width: 700px){
+      .logs{
+        padding:84px 24px;
+        font-size:11px;
+      }
+      .corner{
+        width:72px;
+        height:72px;
+      }
+      .topbar,.bottombar{
+        left:20px;
+        right:20px;
+        font-size:10px;
+      }
+      .bootline{
+        bottom:calc(50% - 90px);
+        font-size:10px;
+        letter-spacing:2px;
+      }
+      .idbox{
+        padding:22px 24px;
+      }
     }
-}
-</style>
+  </style>
 </head>
-
 <body>
+  <div class="noise"></div>
+  <div class="vignette"></div>
+  <div class="scan-move"></div>
 
-<div class="id">zzZ</div>
+  <div class="hud">
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
 
+    <div class="topbar">
+      <span>secure shell // root session</span>
+      <span>signal: stable</span>
+    </div>
+
+    <div class="bottombar">
+      <span>identity locked</span>
+      <span>node // zzz</span>
+    </div>
+  </div>
+
+  <div class="logs" id="logs"></div>
+
+  <div class="center-wrap">
+    <div class="core">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3"></div>
+
+      <div class="bootline" id="bootline">initializing identity core...</div>
+
+      <div class="idbox">
+        <div class="id" id="mainId" data-text=""></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const logBox = document.getElementById("logs");
+    const mainId = document.getElementById("mainId");
+    const bootline = document.getElementById("bootline");
+
+    const logs = [
+      "[BOOT] kernel wake sequence detected",
+      "[SYS ] bypassing idle shell",
+      "[NET ] tunnel established :: 127.0.0.1",
+      "[AUTH] injecting minimal identity payload",
+      "[CORE] sanitizing public metadata",
+      "[LOCK] non-essential data stripped",
+      "[VIEW] rendering terminal facade",
+      "[OK  ] single identifier mounted"
+    ];
+
+    logs.forEach((text, i) => {
+      const line = document.createElement("div");
+      line.className = "logline";
+      line.style.animationDelay = `${i * 0.22}s`;
+      line.textContent = text;
+      logBox.appendChild(line);
+    });
+
+    const finalText = "zzZ";
+    let idx = 0;
+
+    function typeId() {
+      if (idx <= finalText.length) {
+        const current = finalText.slice(0, idx);
+        mainId.setAttribute("data-text", current);
+        mainId.innerHTML = current + '<span class="caret">_</span>';
+        idx++;
+        setTimeout(typeId, 260);
+      } else {
+        mainId.setAttribute("data-text", finalText);
+        mainId.innerHTML = finalText + '<span class="caret">_</span>';
+        bootline.textContent = "identity resolved";
+      }
+    }
+
+    setTimeout(typeId, 1400);
+  </script>
 </body>
 </html>
