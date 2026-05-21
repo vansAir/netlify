@@ -1,481 +1,231 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>zzZ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>回归海斗倒计时</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: {
+        'hex-dark': '#0a0e1a', 'hex-blue': '#00d4ff', 'hex-mid': '#0080ff', 'hex-glow': '#4488ff'
+      }}}
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
   <style>
-    :root{
-      --bg:#030506;
-      --bg2:#071014;
-      --green:#00ff9f;
-      --green-dim:rgba(0,255,159,.18);
-      --green-fade:rgba(0,255,159,.08);
-      --text:#b7ffd9;
-      --danger:#7dffbf;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:#060810;min-height:100vh;font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;color:#c0d8ff;overflow-x:hidden}
+    #particle-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+    #fire-canvas{position:absolute;left:0;right:0;top:0;z-index:2;pointer-events:none}
+    #app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 12px 40px}
+    .page-card{width:100%;max-width:430px}
+    .hero-section{position:relative;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 0 30px}
+    .hero-title{
+      font-family:'Orbitron','Noto Sans SC',sans-serif;
+      font-size:2.8rem;
+      font-weight:900;
+      letter-spacing:.1em;
+      text-align:center;
+      line-height:1.2;
+      background:linear-gradient(180deg,#ffffff 0%,#ffe066 25%,#ff8800 55%,#ff4400 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      filter:drop-shadow(0 0 14px #ff660088) drop-shadow(0 0 40px #ff440055);
+      position:relative;z-index:3;
+      animation:firePulse 2s ease-in-out infinite;
     }
-
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    @keyframes firePulse{
+      0%,100%{filter:drop-shadow(0 0 14px #ff660088) drop-shadow(0 0 40px #ff440055)}
+      50%{filter:drop-shadow(0 0 22px #ff880099) drop-shadow(0 0 56px #ff440077)}
     }
-
-    html,body{
-      width:100%;
-      height:100%;
-      overflow:hidden;
-      background:radial-gradient(circle at center, #071014 0%, #030506 45%, #010202 100%);
-      color:var(--text);
-      font-family:Consolas, "Courier New", monospace;
+    .hero-subtitle{
+      font-size:1.4rem;font-weight:700;letter-spacing:.3em;text-align:center;
+      color:#ffaa44;
+      text-shadow:0 0 10px #ff660088,0 0 24px #ff440044;
+      margin-top:8px;position:relative;z-index:3;
     }
-
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      background:
-        linear-gradient(rgba(255,255,255,0.02), rgba(255,255,255,0.01)),
-        repeating-linear-gradient(
-          to bottom,
-          transparent 0px,
-          transparent 2px,
-          rgba(0,255,159,0.045) 3px,
-          transparent 4px
-        );
-      pointer-events:none;
-      z-index:20;
-      mix-blend-mode:screen;
+    .user-card{
+      background:rgba(0,40,100,.35);backdrop-filter:blur(8px);
+      border:1px solid #0080ff44;border-radius:14px;
+      padding:18px 20px;position:relative;
+      transition:box-shadow .3s,border-color .3s;
+      box-shadow:0 0 8px #0080ff18;
     }
-
-    body::after{
-      content:"";
-      position:fixed;
-      inset:0;
-      background:
-        linear-gradient(90deg, rgba(0,255,159,0.035) 1px, transparent 1px),
-        linear-gradient(rgba(0,255,159,0.035) 1px, transparent 1px);
-      background-size:40px 40px;
-      mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
-      pointer-events:none;
-      z-index:1;
+    .user-card:hover{box-shadow:0 0 18px #00d4ff44,0 0 36px #0080ff22;border-color:#0080ff88}
+    .user-name{color:#fff;font-size:1.25rem;font-weight:700;letter-spacing:.05em}
+    .countdown-text{
+      font-family:'Orbitron',monospace;color:#00d4ff;font-size:1.15rem;font-weight:700;
+      text-shadow:0 0 8px #00d4ffaa,0 0 20px #0080ff44;letter-spacing:.08em;
     }
-
-    .noise,
-    .vignette,
-    .scan-move,
-    .hud,
-    .center-wrap,
-    .logs{
-      position:absolute;
-      inset:0;
+    .countdown-expired{
+      font-family:'Orbitron',monospace;color:#ff4466;font-size:1.05rem;font-weight:700;
+      text-shadow:0 0 10px #ff446699,0 0 24px #ff446644;
     }
-
-    .noise{
-      opacity:.06;
-      z-index:2;
-      background-image:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,.15) 0 1px, transparent 1px),
-        radial-gradient(circle at 80% 30%, rgba(255,255,255,.12) 0 1px, transparent 1px),
-        radial-gradient(circle at 50% 80%, rgba(255,255,255,.12) 0 1px, transparent 1px);
-      background-size: 120px 120px, 170px 170px, 90px 90px;
-      animation: noiseShift .35s infinite steps(2);
-    }
-
-    .vignette{
-      z-index:3;
-      pointer-events:none;
-      box-shadow: inset 0 0 180px rgba(0,0,0,.85);
-    }
-
-    .scan-move{
-      z-index:4;
-      pointer-events:none;
-      overflow:hidden;
-    }
-
-    .scan-move::before{
-      content:"";
-      position:absolute;
-      left:0;
-      width:100%;
-      height:140px;
-      background:linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(0,255,159,.02) 20%,
-        rgba(0,255,159,.13) 50%,
-        rgba(0,255,159,.02) 80%,
-        transparent 100%
-      );
-      filter:blur(8px);
-      animation: scan 5.5s linear infinite;
-    }
-
-    .hud{
-      z-index:5;
-      pointer-events:none;
-    }
-
-    .corner{
-      position:absolute;
-      width:120px;
-      height:120px;
-      border-color:var(--green-dim);
-      filter:drop-shadow(0 0 10px rgba(0,255,159,.18));
-    }
-
-    .corner.tl{top:28px;left:28px;border-top:1px solid;border-left:1px solid;}
-    .corner.tr{top:28px;right:28px;border-top:1px solid;border-right:1px solid;}
-    .corner.bl{bottom:28px;left:28px;border-bottom:1px solid;border-left:1px solid;}
-    .corner.br{bottom:28px;right:28px;border-bottom:1px solid;border-right:1px solid;}
-
-    .topbar,
-    .bottombar{
-      position:absolute;
-      left:36px;
-      right:36px;
-      display:flex;
-      justify-content:space-between;
-      font-size:12px;
-      color:rgba(183,255,217,.5);
-      letter-spacing:2px;
-      text-transform:uppercase;
-    }
-
-    .topbar{ top:18px; }
-    .bottombar{ bottom:18px; }
-
-    .logs{
-      z-index:7;
-      padding:72px 52px;
-      pointer-events:none;
-      font-size:13px;
-      line-height:1.8;
-      color:rgba(183,255,217,.55);
-    }
-
-    .logline{
-      white-space:nowrap;
-      opacity:0;
-      transform:translateY(6px);
-      animation: logIn .5s forwards;
-      text-shadow:0 0 8px rgba(0,255,159,.12);
-    }
-
-    .center-wrap{
-      z-index:10;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      pointer-events:none;
-    }
-
-    .core{
-      position:relative;
-      min-width:min(88vw,900px);
-      min-height:300px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .ring{
-      position:absolute;
-      border:1px solid rgba(0,255,159,.08);
-      border-radius:50%;
-      animation: rotate 18s linear infinite;
-    }
-
-    .ring.r1{ width:220px; height:220px; }
-    .ring.r2{ width:320px; height:320px; animation-direction:reverse; animation-duration:26s; }
-    .ring.r3{ width:460px; height:460px; animation-duration:40s; }
-
-    .ring::before,
-    .ring::after{
-      content:"";
-      position:absolute;
-      background:var(--green);
-      box-shadow:0 0 12px var(--green), 0 0 24px var(--green);
-      opacity:.75;
-    }
-
-    .ring::before{
-      width:10px;height:2px;
-      top:50%;left:-5px;
-      transform:translateY(-50%);
-    }
-
-    .ring::after{
-      width:2px;height:10px;
-      top:-5px;left:50%;
-      transform:translateX(-50%);
-    }
-
-    .idbox{
-      position:relative;
-      padding:28px 46px;
-      border:1px solid rgba(0,255,159,.14);
-      background:linear-gradient(180deg, rgba(0,255,159,.035), rgba(0,255,159,.015));
-      box-shadow:
-        inset 0 0 40px rgba(0,255,159,.03),
-        0 0 30px rgba(0,255,159,.07),
-        0 0 80px rgba(0,255,159,.05);
-      backdrop-filter: blur(2px);
-    }
-
-    .idbox::before,
-    .idbox::after{
-      content:"";
-      position:absolute;
-      left:10px;
-      right:10px;
-      height:1px;
-      background:linear-gradient(90deg, transparent, rgba(0,255,159,.4), transparent);
-    }
-
-    .idbox::before{ top:8px; }
-    .idbox::after{ bottom:8px; }
-
-    .id{
-      position:relative;
-      font-size:clamp(60px, 12vw, 168px);
-      letter-spacing:.24em;
-      padding-left:.24em;
-      color:var(--green);
-      text-transform:none;
-      text-shadow:
-        0 0 8px rgba(0,255,159,.8),
-        0 0 18px rgba(0,255,159,.55),
-        0 0 42px rgba(0,255,159,.28);
-      animation:
-        pulse 2.8s ease-in-out infinite,
-        flicker 4.2s infinite,
-        glitchSkew 5.5s infinite steps(1);
-    }
-
-    .id::before,
-    .id::after{
-      content:attr(data-text);
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      opacity:.75;
-    }
-
-    .id::before{
-      color:#66ffd0;
-      transform:translate(-2px,0);
-      clip-path:polygon(0 2%,100% 2%,100% 38%,0 38%);
-      animation: glitch1 2.6s infinite steps(2);
-    }
-
-    .id::after{
-      color:#00ff73;
-      transform:translate(2px,0);
-      clip-path:polygon(0 62%,100% 62%,100% 100%,0 100%);
-      animation: glitch2 3.1s infinite steps(2);
-    }
-
-    .caret{
-      display:inline-block;
-      width:.6ch;
-      margin-left:.15em;
-      color:var(--green);
-      animation: blink .9s steps(1) infinite;
-      text-shadow:0 0 10px var(--green);
-    }
-
-    .bootline{
-      position:absolute;
-      left:50%;
-      bottom:calc(50% - 120px);
-      transform:translateX(-50%);
-      font-size:12px;
-      letter-spacing:3px;
-      color:rgba(183,255,217,.56);
-      text-transform:uppercase;
-      white-space:nowrap;
-      opacity:.9;
-    }
-
-    @keyframes scan{
-      from{ transform:translateY(-180px); }
-      to{ transform:translateY(calc(100vh + 180px)); }
-    }
-
-    @keyframes noiseShift{
-      0%{ transform:translate(0,0); }
-      25%{ transform:translate(1px,-1px); }
-      50%{ transform:translate(-1px,1px); }
-      75%{ transform:translate(1px,1px); }
-      100%{ transform:translate(0,0); }
-    }
-
-    @keyframes rotate{
-      from{ transform:rotate(0deg); }
-      to{ transform:rotate(360deg); }
-    }
-
-    @keyframes pulse{
-      0%,100%{
-        transform:scale(1);
-        filter:brightness(1);
-      }
-      50%{
-        transform:scale(1.02);
-        filter:brightness(1.18);
-      }
-    }
-
-    @keyframes flicker{
-      0%, 15%, 18%, 22%, 49%, 52%, 100%{ opacity:1; }
-      16%, 21%, 50%{ opacity:.72; }
-      17%, 51%{ opacity:.92; }
-    }
-
-    @keyframes blink{
-      0%,49%{ opacity:1; }
-      50%,100%{ opacity:0; }
-    }
-
-    @keyframes glitch1{
-      0%, 100%{ transform:translate(-2px,0); }
-      20%{ transform:translate(2px,-1px); }
-      40%{ transform:translate(-3px,1px); }
-      60%{ transform:translate(3px,0); }
-      80%{ transform:translate(-1px,-1px); }
-    }
-
-    @keyframes glitch2{
-      0%, 100%{ transform:translate(2px,0); }
-      20%{ transform:translate(-2px,1px); }
-      40%{ transform:translate(3px,-1px); }
-      60%{ transform:translate(-3px,0); }
-      80%{ transform:translate(1px,1px); }
-    }
-
-    @keyframes glitchSkew{
-      0%, 100%{ transform:skewX(0deg); }
-      94%{ transform:skewX(0deg); }
-      95%{ transform:skewX(2deg); }
-      96%{ transform:skewX(-3deg); }
-      97%{ transform:skewX(1deg); }
-      98%{ transform:skewX(0deg); }
-    }
-
-    @keyframes logIn{
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
-
-    @media (max-width: 700px){
-      .logs{
-        padding:84px 24px;
-        font-size:11px;
-      }
-      .corner{
-        width:72px;
-        height:72px;
-      }
-      .topbar,.bottombar{
-        left:20px;
-        right:20px;
-        font-size:10px;
-      }
-      .bootline{
-        bottom:calc(50% - 90px);
-        font-size:10px;
-        letter-spacing:2px;
-      }
-      .idbox{
-        padding:22px 24px;
-      }
-    }
+    .cd-block{display:inline-flex;flex-direction:column;align-items:center;margin:0 5px}
+    .cd-num{font-size:2rem;line-height:1}
+    .cd-label{font-size:.55rem;color:#4488ffaa;letter-spacing:.1em;margin-top:3px}
+    .expire-time{color:#4488ff55;font-size:.72rem;letter-spacing:.03em}
+    .empty-state{color:#4488ff44;font-size:.9rem;letter-spacing:.15em;text-align:center;padding:40px 0}
+    .footer-note{color:#4488ff33;font-size:.65rem;letter-spacing:.05em;text-align:center}
+    ::-webkit-scrollbar{width:3px}
+    ::-webkit-scrollbar-track{background:#060810}
+    ::-webkit-scrollbar-thumb{background:#0080ff44;border-radius:2px}
   </style>
 </head>
 <body>
-  <div class="noise"></div>
-  <div class="vignette"></div>
-  <div class="scan-move"></div>
-
-  <div class="hud">
-    <div class="corner tl"></div>
-    <div class="corner tr"></div>
-    <div class="corner bl"></div>
-    <div class="corner br"></div>
-
-    <div class="topbar">
-      <span>secure shell // root session</span>
-      <span>signal: stable</span>
-    </div>
-
-    <div class="bottombar">
-      <span>identity locked</span>
-      <span>node // zzz</span>
-    </div>
-  </div>
-
-  <div class="logs" id="logs"></div>
-
-  <div class="center-wrap">
-    <div class="core">
-      <div class="ring r1"></div>
-      <div class="ring r2"></div>
-      <div class="ring r3"></div>
-
-      <div class="bootline" id="bootline">initializing identity core...</div>
-
-      <div class="idbox">
-        <div class="id" id="mainId" data-text=""></div>
-      </div>
+  <canvas id="particle-canvas"></canvas>
+  <div id="app">
+    <div class="page-card">
+      <section class="hero-section">
+        <canvas id="fire-canvas"></canvas>
+        <h1 class="hero-title">回归海斗</h1>
+        <p class="hero-subtitle">倒 计 时</p>
+      </section>
+      <section>
+        <div v-if="users.length===0" class="empty-state">- 暂无玩家 -</div>
+        <div v-for="user in users" :key="user.name" class="user-card mb-4">
+          <div class="user-name mb-3">{{ user.name }}</div>
+          <div v-if="getRemaining(user.expire_ts)===null" class="countdown-expired">已到期</div>
+          <div v-else class="countdown-text flex items-end flex-wrap gap-1">
+            <span class="cd-block"><span class="cd-num">{{ getRemaining(user.expire_ts).days }}</span><span class="cd-label">天</span></span>
+            <span class="cd-block"><span class="cd-num">{{ getRemaining(user.expire_ts).hours }}</span><span class="cd-label">时</span></span>
+            <span class="cd-block"><span class="cd-num">{{ getRemaining(user.expire_ts).minutes }}</span><span class="cd-label">分</span></span>
+            <span class="cd-block"><span class="cd-num">{{ getRemaining(user.expire_ts).seconds }}</span><span class="cd-label">秒</span></span>
+          </div>
+          <div class="expire-time mt-2">到期：{{ formatTs(user.expire_ts) }}</div>
+        </div>
+      </section>
+      <footer class="mt-6"><p class="footer-note">每秒刷新 · 每30s同步服务器</p></footer>
     </div>
   </div>
 
   <script>
-    const logBox = document.getElementById("logs");
-    const mainId = document.getElementById("mainId");
-    const bootline = document.getElementById("bootline");
+    const { createApp, ref, onMounted, onUnmounted } = Vue;
+    const API_BASE = 'https://monopoly.z-zzz.site';
+    createApp({
+      setup() {
+        const users = ref([]);
+        const nowTs = ref(Math.floor(Date.now() / 1000));
+        async function fetchUsers() {
+          try {
+            const res = await fetch(API_BASE + '/api/users');
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            users.value = await res.json();
+          } catch (e) { console.error('[fetchUsers]', e); }
+        }
+        function getRemaining(expireTs) {
+          const diff = expireTs - nowTs.value;
+          if (diff <= 0) return null;
+          return {
+            days: String(Math.floor(diff / 86400)).padStart(2, '0'),
+            hours: String(Math.floor((diff % 86400) / 3600)).padStart(2, '0'),
+            minutes: String(Math.floor((diff % 3600) / 60)).padStart(2, '0'),
+            seconds: String(diff % 60).padStart(2, '0'),
+          };
+        }
+        function formatTs(ts) {
+          const d = new Date(ts * 1000), p = n => String(n).padStart(2, '0');
+          return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());
+        }
+        let tickTimer, syncTimer;
+        onMounted(() => {
+          fetchUsers();
+          tickTimer = setInterval(() => { nowTs.value = Math.floor(Date.now() / 1000); }, 1000);
+          syncTimer = setInterval(fetchUsers, 30000);
+        });
+        onUnmounted(() => { clearInterval(tickTimer); clearInterval(syncTimer); });
+        return { users, getRemaining, formatTs };
+      },
+    }).mount('#app');
+  </script>
 
-    const logs = [
-      "[BOOT] kernel wake sequence detected",
-      "[SYS ] bypassing idle shell",
-      "[NET ] tunnel established :: 127.0.0.1",
-      "[AUTH] injecting minimal identity payload",
-      "[CORE] sanitizing public metadata",
-      "[LOCK] non-essential data stripped",
-      "[VIEW] rendering terminal facade",
-      "[OK  ] single identifier mounted"
-    ];
-
-    logs.forEach((text, i) => {
-      const line = document.createElement("div");
-      line.className = "logline";
-      line.style.animationDelay = `${i * 0.22}s`;
-      line.textContent = text;
-      logBox.appendChild(line);
-    });
-
-    const finalText = "zzZ";
-    let idx = 0;
-
-    function typeId() {
-      if (idx <= finalText.length) {
-        const current = finalText.slice(0, idx);
-        mainId.setAttribute("data-text", current);
-        mainId.innerHTML = current + '<span class="caret">_</span>';
-        idx++;
-        setTimeout(typeId, 260);
-      } else {
-        mainId.setAttribute("data-text", finalText);
-        mainId.innerHTML = finalText + '<span class="caret">_</span>';
-        bootline.textContent = "identity resolved";
+  <!-- 轻量粒子（无连线，40个） -->
+  <script>
+  (function(){
+    var c=document.getElementById('particle-canvas'),x=c.getContext('2d');
+    var C=['#00d4ff','#0080ff','#ffffff','#4488ff','#66bbff'];
+    var W=0,H=0,ps=[];
+    function rf(a,b){return Math.random()*(b-a)+a}
+    function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+    function mk(){return{x:rf(0,W),y:rf(0,H),vx:rf(-.3,.3),vy:rf(-.3,.3),r:rf(1,2),c:C[ri(0,C.length-1)],a:rf(.3,.9),f:0}}
+    function rs(){W=innerWidth;H=innerHeight;c.width=W;c.height=H;ps=[];for(var i=0;i<40;i++)ps.push(mk())}
+    function lp(){
+      x.clearRect(0,0,W,H);
+      for(var i=0;i<ps.length;i++){
+        var p=ps[i];
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.x<-5)p.x=W+5;if(p.x>W+5)p.x=-5;
+        if(p.y<-5)p.y=H+5;if(p.y>H+5)p.y=-5;
+        if(p.f<=0&&Math.random()<.005)p.f=6;
+        if(p.f>0)p.f--;
+        x.beginPath();
+        x.arc(p.x,p.y,p.r+(p.f>0?1.5:0),0,Math.PI*2);
+        x.fillStyle=p.f>0?'#fff':p.c;
+        x.globalAlpha=p.f>0?1:p.a;
+        x.shadowColor=p.c;x.shadowBlur=p.f>0?20:6;
+        x.fill();x.shadowBlur=0;x.globalAlpha=1;
       }
+      requestAnimationFrame(lp);
     }
+    addEventListener('resize',rs);rs();lp();
+  })();
+  </script>
 
-    setTimeout(typeId, 1400);
+  <!-- 火焰燃烧特效 -->
+  <script>
+  (function(){
+    var c=document.getElementById('fire-canvas');
+    if(!c)return;
+    var x=c.getContext('2d'),fs=[];
+    var MX=55;
+    function rf(a,b){return Math.random()*(b-a)+a}
+    function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+    function rs(){
+      var s=c.parentElement;
+      c.width=s.offsetWidth;
+      c.height=s.offsetHeight;
+    }
+    function sp(){
+      fs.push({
+        x:rf(c.width*.05,c.width*.95),
+        y:c.height*.65,
+        vx:rf(-.8,.8),
+        vy:rf(-3,-1.2),
+        r:rf(3,12),
+        life:1,
+        decay:rf(.01,.025),
+        hue:ri(5,50)
+      });
+    }
+    function lp(){
+      x.clearRect(0,0,c.width,c.height);
+      while(fs.length<MX)sp();
+      for(var i=fs.length-1;i>=0;i--){
+        var f=fs[i];
+        f.x+=f.vx+rf(-.4,.4);
+        f.y+=f.vy;
+        f.vy*=.99;
+        f.r*=.993;
+        f.life-=f.decay;
+        if(f.life<=0||f.r<.5){fs.splice(i,1);continue}
+        x.beginPath();
+        x.arc(f.x,f.y,f.r,0,Math.PI*2);
+        var a=f.life*.75;
+        x.fillStyle='hsla('+f.hue+',100%,'+(50+f.life*30)+'%,'+a+')';
+        x.shadowColor='hsla('+f.hue+',100%,60%,'+(a*.5)+')';
+        x.shadowBlur=18;
+        x.fill();
+        x.shadowBlur=0;
+      }
+      requestAnimationFrame(lp);
+    }
+    addEventListener('resize',rs);rs();lp();
+  })();
   </script>
 </body>
 </html>
